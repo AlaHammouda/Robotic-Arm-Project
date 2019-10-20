@@ -60,7 +60,7 @@ while True:
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
 			STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
 			print(center)
-			#ser.write(str.encode(STM_Data))
+			ser.write(str.encode(STM_Data))
 			
 		# loop over the set of tracked points
 	
