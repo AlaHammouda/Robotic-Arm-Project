@@ -9,7 +9,7 @@ import time
 import serial
 
 
-#ser = serial.Serial('COM26',baudrate=9600, timeout=1)
+ser = serial.Serial('COM12',baudrate=9600, timeout=1)
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
@@ -42,7 +42,10 @@ while True:
 	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 	cnts = imutils.grab_contours(cnts)
 	center = None
-
+	center = (int(50), int(25))
+	STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
+	print(center)
+	ser.write(str.encode(STM_Data))
 	# only proceed if at least one contour was found
 	if len(cnts) > 0:
 		# find the largest contour in the mask, then use
@@ -53,14 +56,13 @@ while True:
 		M = cv2.moments(c)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
-
 		# only proceed if the radius meets a minimum size
 		if radius > 19:
 			# draw the circle and centroid on the frame,
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
 			STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
 			print(center)
-			ser.write(str.encode(STM_Data))
+			#ser.write(str.encode(STM_Data))
 			
 		# loop over the set of tracked points
 	

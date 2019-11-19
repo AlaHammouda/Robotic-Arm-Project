@@ -49,10 +49,13 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+TIM_HandleTypeDef htim6;
+
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+    int s=0;
 		int x_Atome=0;                           // les variables d'odométries
 		int y_Atome=0;
 		int i=0; 
@@ -60,23 +63,32 @@ UART_HandleTypeDef huart2;
 		char	x_tab[3]={0};      
 		char	y_tab[3]={0};
 	               
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_TIM6_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
+		
+		
+		
+		
 #ifdef __GNUC__
    #define  PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else  
    #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f) 
 #endif 
 	 
+	 
+void Delay_micros(int N);	   
+	 			
+			                              
+				     
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -118,10 +130,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
-
-  	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
+ 	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
 
 
   /* USER CODE END 2 */
@@ -136,7 +148,8 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
 		
-
+Delay_micros(1000000);
+s++;
 		
 	
   }
@@ -203,6 +216,30 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/* TIM6 init function */
+static void MX_TIM6_Init(void)
+{
+
+  TIM_MasterConfigTypeDef sMasterConfig;
+
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 2;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 2;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
 /* USART2 init function */
 static void MX_USART2_UART_Init(void)
 {
@@ -259,6 +296,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+	 void Delay_micros(int N){
+     for(int f=0;f<N;f++){
+			  for(int j=0;j<26;j++);		
+		  }			
+    }
 
 /* USER CODE END 4 */
 

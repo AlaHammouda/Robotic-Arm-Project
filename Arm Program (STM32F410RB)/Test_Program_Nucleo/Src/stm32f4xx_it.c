@@ -34,7 +34,6 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
-#include <stdlib.h>
 
 /* USER CODE BEGIN 0 */
 
@@ -50,6 +49,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim6;
 extern UART_HandleTypeDef huart2;
 
 /******************************************************************************/
@@ -100,7 +100,21 @@ void USART2_IRQHandler(void)
 		    y_Atome=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
         i=0;
 				}
-					/* USER CODE END USART2_IRQn 1 */
+  /* USER CODE END USART2_IRQn 1 */
+}
+
+/**
+* @brief This function handles TIM6 global interrupt and DAC channel underrun error interrupt.
+*/
+void TIM6_DAC_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
+
+  /* USER CODE END TIM6_DAC_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim6);
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
+
+  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
