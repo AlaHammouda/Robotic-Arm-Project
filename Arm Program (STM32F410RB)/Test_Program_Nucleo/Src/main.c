@@ -86,9 +86,7 @@ static void MX_TIM6_Init(void);
 	 
 	 
 void Delay_micros(int N);	   
-	 			
-			                              
-				     
+	 					                             			     
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */

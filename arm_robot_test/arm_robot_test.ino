@@ -1,12 +1,37 @@
  
-const int stepPin = 3;//3
-const int dirPin = 2;//2
+const int stepPin_1 = 2;
+const int dirPin_1 = 5;
+const int stepPin_2 = 3;
+const int dirPin_2 =6;
+const int stepPin_3 = 4;
+const int dirPin_3 = 7;
+const int stepPin_4 = 12;
+const int dirPin_4 = 13;
+int stepper_Freq=650;
 
 void setup(){
-  pinMode(stepPin, OUTPUT);
-  pinMode(dirPin, OUTPUT);
-bas(80);
-//haut(40);
+  pinMode(stepPin_1, OUTPUT);
+  pinMode(dirPin_1, OUTPUT);
+  pinMode(stepPin_2, OUTPUT);
+  pinMode(dirPin_2, OUTPUT);
+  pinMode(stepPin_3, OUTPUT);
+  pinMode(dirPin_3, OUTPUT);
+  pinMode(stepPin_4, OUTPUT);
+  pinMode(dirPin_4, OUTPUT);
+//rotate_stepper(10,1,stepPin_1,dirPin_1);
+//rotate_stepper(10,0,stepPin_1,dirPin_1);
+  digitalWrite(dirPin_1, 1); // Enables the motor to move in a particular direction
+  digitalWrite(dirPin_2, 1); // Enables the motor to move in a particular direction
+  digitalWrite(dirPin_3, 1); // Enables the motor to move in a particular direction
+  digitalWrite(dirPin_4, 1); // Enables the motor to move in a particular direction
+
+  for (int x = 0; x < 2000; x++) {
+    digitalWrite(stepPin_1, HIGH);digitalWrite(stepPin_2, HIGH);digitalWrite(stepPin_3, HIGH);digitalWrite(stepPin_4, HIGH);
+    delayMicroseconds(stepper_Freq);  //300       // 100
+        digitalWrite(stepPin_1, LOW);digitalWrite(stepPin_2, LOW);digitalWrite(stepPin_3, LOW);digitalWrite(stepPin_4, LOW);
+    delayMicroseconds(stepper_Freq);              // 100
+  }
+
 }
 
 
@@ -15,26 +40,13 @@ void loop() {
 
 
 
-void haut(float dist)
-{  dist=447*dist;
-  digitalWrite(dirPin, LOW); // Enables the motor to move in a particular direction
+void rotate_stepper(float dist,int sens,int stepPin,int dirPin)
+{  dist=200*dist;
+  digitalWrite(dirPin, sens); // Enables the motor to move in a particular direction
   for (int x = 0; x < dist; x++) {
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(80);  //300       // 100
+    delayMicroseconds(stepper_Freq);  //300       // 100
     digitalWrite(stepPin, LOW);
-    delayMicroseconds(80);              // 100
-  }
-}
-
-
-void bas(float dist)
-{   dist=490*dist;
-  digitalWrite(dirPin, HIGH); //Changes the rotations direction
-  // Makes 400 pulses for making two full cycle rotation
-  for (int x = 0; x < dist; x++) {
-    digitalWrite(stepPin, HIGH);
-    delayMicroseconds(80);
-    digitalWrite(stepPin, LOW);
-    delayMicroseconds(80);
+    delayMicroseconds(stepper_Freq);              // 100
   }
 }
