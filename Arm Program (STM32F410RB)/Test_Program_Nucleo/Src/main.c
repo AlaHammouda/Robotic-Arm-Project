@@ -41,7 +41,6 @@
 #include "stm32f4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-
 	#include "math.h"
 	#include "string.h"
 	#include <stdlib.h>
@@ -55,8 +54,9 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+   
     int s=0;
-		int x_Atome=0;                           // les variables d'odométries
+		int x_Atome=0;                         
 		int y_Atome=0;
 		int i=0; 
 		char	PC_Data[6];        
@@ -75,9 +75,6 @@ static void MX_TIM6_Init(void);
 /* Private function prototypes -----------------------------------------------*/
 
 		
-		
-		
-		
 #ifdef __GNUC__
    #define  PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else  
@@ -86,7 +83,11 @@ static void MX_TIM6_Init(void);
 	 
 	 
 void Delay_micros(int N);	   
-	 					                             			     
+void step_1(int dist,int sens);
+void step_2(int dist,int sens);	 
+void step_3(int dist,int sens);
+void step_4(int dist,int sens);	 
+	 	 
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -130,10 +131,15 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-
  	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
 
-
+ step_2(1200,1);
+ step_1(1800,0);
+ step_2(600,0);
+ step_3(1300,1);
+ step_4(800,1);
+ 
+ 
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,9 +151,7 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-		
-Delay_micros(1000000);
-s++;
+
 		
 	
   }
@@ -276,7 +280,14 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LD2_Pin|GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_9 
+                          |GPIO_PIN_10, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9|GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -284,12 +295,28 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
+  /*Configure GPIO pins : LD2_Pin PA6 PA8 PA9 
+                           PA10 */
+  GPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_9 
+                          |GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB10 PB3 PB4 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PC9 PC10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 
@@ -300,6 +327,52 @@ static void MX_GPIO_Init(void)
 			  for(int j=0;j<26;j++);		
 		  }			
     }
+	 
+		
+		
+	void step_1(int dist,int sens){
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens);
+		for(int i=0;i<dist;i++){
+		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
+     Delay_micros(650);
+     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
+     Delay_micros(650);
+		}
+	}
+	
+		
+		void step_2(int dist,int sens){
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens);
+		for(int i=0;i<dist;i++){
+		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
+     Delay_micros(650);
+     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
+     Delay_micros(650);
+		}
+	}
+		
+		void step_3(int dist,int sens){
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens);
+		for(int i=0;i<dist;i++){
+		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
+     Delay_micros(650);
+     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
+     Delay_micros(650);
+		}
+	}
+
+			void step_4(int dist,int sens){
+		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens);
+		for(int i=0;i<dist;i++){
+		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
+     Delay_micros(650);
+     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
+     Delay_micros(650);
+		}
+	}	
+
+	
+	
 
 /* USER CODE END 4 */
 
