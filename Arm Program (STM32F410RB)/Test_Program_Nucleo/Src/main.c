@@ -133,12 +133,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
  	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
 
+ step_3(1500,1);
+ step_3(1500,0);
+
+
+/*
  step_2(1200,1);
  step_1(1800,0);
  step_2(600,0);
  step_3(1300,1);
  step_4(800,1);
- 
+ */
  
   /* USER CODE END 2 */
 
