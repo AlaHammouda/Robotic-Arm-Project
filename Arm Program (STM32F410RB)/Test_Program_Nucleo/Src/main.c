@@ -132,19 +132,50 @@ int main(void)
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
  	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
+ 
+  //step_3(2*5907,0);
 
- step_3(1500,1);
- step_3(1500,0);
+ 
 
+step_1(5907,0);//76
+HAL_Delay(2000);
+step_1(5907,1);//76
+HAL_Delay(2000);
 
 /*
- step_2(1200,1);
+step_3(2467,1);//76
+HAL_Delay(2000);
+step_3(1710,1);
+HAL_Delay(2000);
+step_3(1710,0);
+HAL_Delay(2000);
+step_3(2467,0);
+HAL_Delay(2000);
+*/
+/*
+ step_1(1477,0);
+HAL_Delay(1000);
+ step_1(1477,0); // step1 360 °
+HAL_Delay(1000);
+ step_1(1477,0);
+HAL_Delay(1000);
+ step_1(1476,0); // step1 360 °
+HAL_Delay(3000);
+ step_1(5907,1); // step1 360 °
+*/
+/*
+ step_2(1200,1);205.38
  step_1(1800,0);
  step_2(600,0);
  step_3(1300,1);
  step_4(800,1);
  */
  
+  // step1 360 °    ->  5907-step  done !!!
+  // step2 205.38 ° ->            .....
+  // step3 227.15 ° ->  4177-step  done !!!
+  // step4 360 °    ->  6490-step presque done ? !!!
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -339,9 +370,9 @@ static void MX_GPIO_Init(void)
 		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens);
 		for(int i=0;i<dist;i++){
 		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-     Delay_micros(650);
+     Delay_micros(500);
      HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-     Delay_micros(650);
+     Delay_micros(500);
 		}
 	}
 	
@@ -350,9 +381,9 @@ static void MX_GPIO_Init(void)
 		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens);
 		for(int i=0;i<dist;i++){
 		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-     Delay_micros(650);
+     Delay_micros(500);
      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-     Delay_micros(650);
+     Delay_micros(500);
 		}
 	}
 		
@@ -360,9 +391,9 @@ static void MX_GPIO_Init(void)
 		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens);
 		for(int i=0;i<dist;i++){
 		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
-     Delay_micros(650);
+     Delay_micros(500);
      HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
-     Delay_micros(650);
+     Delay_micros(500);
 		}
 	}
 
@@ -370,9 +401,9 @@ static void MX_GPIO_Init(void)
 		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens);
 		for(int i=0;i<dist;i++){
 		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
-     Delay_micros(650);
+     Delay_micros(500);
      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
-     Delay_micros(650);
+     Delay_micros(500);
 		}
 	}	
 
