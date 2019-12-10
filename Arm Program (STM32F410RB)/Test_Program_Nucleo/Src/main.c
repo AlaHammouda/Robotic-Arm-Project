@@ -137,11 +137,14 @@ int main(void)
 
  
 
-step_1(5907,0);//76
+step_2(994,1);//76
 HAL_Delay(2000);
-step_1(5907,1);//76
+step_2(2512,1);//76
 HAL_Delay(2000);
-
+step_2(2512,0);//76 
+HAL_Delay(2000);
+step_2(994,0);//76 
+HAL_Delay(2000);
 /*
 step_3(2467,1);//76
 HAL_Delay(2000);
@@ -171,10 +174,10 @@ HAL_Delay(3000);
  step_4(800,1);
  */
  
-  // step1 360 °    ->  5907-step  done !!!
-  // step2 205.38 ° ->            .....
-  // step3 227.15 ° ->  4177-step  done !!!
-  // step4 360 °    ->  6490-step presque done ? !!!
+  // step1 360 °    ->  5907-steps  done !!!
+  // step2 194 ° ->  3506-steps          .....    55 
+  // step3 227.15 ° ->  4177-steps  done !!!
+  // step4 360 °    ->  6490-steps presque done ? !!!
 
   /* USER CODE END 2 */
 
@@ -381,9 +384,9 @@ static void MX_GPIO_Init(void)
 		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens);
 		for(int i=0;i<dist;i++){
 		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-     Delay_micros(500);
+     Delay_micros(550);
      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-     Delay_micros(500);
+     Delay_micros(550);
 		}
 	}
 		
