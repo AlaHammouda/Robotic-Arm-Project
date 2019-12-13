@@ -3,6 +3,8 @@
 "test_program_nucleo\main.o"
 "test_program_nucleo\stm32f4xx_it.o"
 "test_program_nucleo\stm32f4xx_hal_msp.o"
+"test_program_nucleo\stm32f4xx_hal_adc.o"
+"test_program_nucleo\stm32f4xx_hal_adc_ex.o"
 "test_program_nucleo\stm32f4xx_hal_tim.o"
 "test_program_nucleo\stm32f4xx_hal_tim_ex.o"
 "test_program_nucleo\stm32f4xx_hal_uart.o"

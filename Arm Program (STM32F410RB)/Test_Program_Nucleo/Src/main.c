@@ -48,6 +48,8 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 TIM_HandleTypeDef htim6;
 
 UART_HandleTypeDef huart2;
@@ -55,7 +57,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
    
-    int s=0;
+    int adc=0;
 		int x_Atome=0;                         
 		int y_Atome=0;
 		int i=0; 
@@ -70,6 +72,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM6_Init(void);
+static void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -86,7 +89,8 @@ void Delay_micros(int N);
 void step_1(int dist,int sens);
 void step_2(int dist,int sens);	 
 void step_3(int dist,int sens);
-void step_4(int dist,int sens);	 
+void step_4(int dist,int sens);
+void Get_dist_Obstacle(void);	 
 	 	 
 /* USER CODE END PFP */
 
@@ -130,13 +134,16 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_TIM6_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
  	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
  
   //step_3(2*5907,0);
 
- 
+// while(1){Get_dist_Obstacle();}
 
+	
+/*
 step_2(994,1);//76
 HAL_Delay(2000);
 step_2(2512,1);//76
@@ -145,6 +152,8 @@ step_2(2512,0);//76
 HAL_Delay(2000);
 step_2(994,0);//76 
 HAL_Delay(2000);
+*/
+
 /*
 step_3(2467,1);//76
 HAL_Delay(2000);
@@ -174,6 +183,7 @@ HAL_Delay(3000);
  step_4(800,1);
  */
  
+ 
   // step1 360 °    ->  5907-steps  done !!!
   // step2 194 ° ->  3506-steps          .....    55 
   // step3 227.15 ° ->  4177-steps  done !!!
@@ -186,12 +196,11 @@ HAL_Delay(3000);
   while (1)
   {
 
-  /* USER CODE END WHILE */
+  /* USER !CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
-
-		
+	 HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1); HAL_Delay(15000);
+	 HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);HAL_Delay(15000);
 	
   }
   /* USER CODE END 3 */
@@ -255,6 +264,43 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* ADC1 init function */
+static void MX_ADC1_Init(void)
+{
+
+  ADC_ChannelConfTypeDef sConfig;
+
+    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+    */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_10B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+    */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /* TIM6 init function */
@@ -323,10 +369,10 @@ static void MX_GPIO_Init(void)
                           |GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4|GPIO_PIN_9|GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9|GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -343,19 +389,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : PC4 PC9 PC10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_9|GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
   /*Configure GPIO pins : PB10 PB3 PB4 PB5 */
   GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PC9 PC10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 
@@ -411,7 +457,10 @@ static void MX_GPIO_Init(void)
 	}	
 
 	
-	
+void Get_dist_Obstacle(){	
+			HAL_ADC_Start(&hadc1);
+		  adc=HAL_ADC_GetValue(&hadc1);							
+		}
 
 /* USER CODE END 4 */
 

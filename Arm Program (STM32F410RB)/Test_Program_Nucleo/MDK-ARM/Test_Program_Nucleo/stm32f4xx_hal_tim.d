@@ -22,6 +22,8 @@ test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm
 test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
+test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 test_program_nucleo\stm32f4xx_hal_tim.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
