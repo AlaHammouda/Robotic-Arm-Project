@@ -140,7 +140,7 @@ int main(void)
  
   //step_3(2*5907,0);
 
-// while(1){Get_dist_Obstacle();}
+ while(1){Get_dist_Obstacle();}
 
 	
 /*
@@ -196,11 +196,11 @@ HAL_Delay(3000);
   while (1)
   {
 
-  /* USER !CODE END WHILE */
+  /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	 HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1); HAL_Delay(15000);
-	 HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);HAL_Delay(15000);
+	// HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1); HAL_Delay(5000);
+	// HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);HAL_Delay(5000);
 	
   }
   /* USER CODE END 3 */
