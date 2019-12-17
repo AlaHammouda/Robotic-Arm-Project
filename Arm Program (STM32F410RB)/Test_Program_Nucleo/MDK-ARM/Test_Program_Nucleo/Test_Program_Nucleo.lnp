@@ -1,8 +1,10 @@
 --cpu=Cortex-M4.fp
 "test_program_nucleo\startup_stm32f410rx.o"
 "test_program_nucleo\main.o"
+"test_program_nucleo\freertos.o"
 "test_program_nucleo\stm32f4xx_it.o"
 "test_program_nucleo\stm32f4xx_hal_msp.o"
+"test_program_nucleo\stm32f4xx_hal_timebase_tim.o"
 "test_program_nucleo\stm32f4xx_hal_adc.o"
 "test_program_nucleo\stm32f4xx_hal_adc_ex.o"
 "test_program_nucleo\stm32f4xx_hal_tim.o"
@@ -21,6 +23,15 @@
 "test_program_nucleo\stm32f4xx_hal_cortex.o"
 "test_program_nucleo\stm32f4xx_hal.o"
 "test_program_nucleo\system_stm32f4xx.o"
+"test_program_nucleo\heap_4.o"
+"test_program_nucleo\port.o"
+"test_program_nucleo\croutine.o"
+"test_program_nucleo\event_groups.o"
+"test_program_nucleo\list.o"
+"test_program_nucleo\queue.o"
+"test_program_nucleo\tasks.o"
+"test_program_nucleo\timers.o"
+"test_program_nucleo\cmsis_os.o"
 --library_type=microlib --strict --scatter "Test_Program_Nucleo\Test_Program_Nucleo.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

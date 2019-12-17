@@ -603,12 +603,12 @@ ARM Macro Assembler    Page 10
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=test_program_nucleo\startup_stm32f410rx.d -otest_program_nucleo
-\startup_stm32f410rx.o -I.\RTE\_Test_Program_Nucleo -IC:\Keil_v5\ARM\PACK\ARM\C
-MSIS\5.6.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.14.0\D
-rivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predefin
-e="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 525" --predefine="_RT
-E_ SETA 1" --predefine="STM32F410Rx SETA 1" --list=startup_stm32f410rx.lst star
-tup_stm32f410rx.s
+\startup_stm32f410rx.o -I..\\Inc -I.\RTE\_Test_Program_Nucleo -IC:\Keil_v5\ARM\
+PACK\ARM\CMSIS\5.6.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DF
+P\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" 
+--predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 525" --pred
+efine="_RTE_ SETA 1" --predefine="STM32F410Rx SETA 1" --list=startup_stm32f410r
+x.lst startup_stm32f410rx.s
 
 
 
