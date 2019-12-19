@@ -38,15 +38,18 @@
 
 /* USER CODE BEGIN 0 */
 
-	extern	int x_Atome;                           // les variables d'odométries
-	extern	int y_Atome;
+	extern	int x_Defected;                           // les variables d'odométries
+	extern	int y_Defected;
 	extern  int i;
 
 	extern	char	PC_Data[6];        
 	extern	char	x_tab[3];        
 	extern	char	y_tab[3];       
-	               
-
+	extern  char  state;
+  extern  const char  extracting;	
+  extern  const char  sleeping;   // 1 step => 0.060944641 ° deg
+	extern  const char  tracking;
+  extern  void Set_joint_angles(float xt,float yt,float zt);
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -112,8 +115,12 @@ void USART2_IRQHandler(void)
 				y_tab[1]=PC_Data[4];
 				y_tab[2]=PC_Data[5];
 	      if(i==6){
-	      x_Atome=(int)(x_tab[0]-'0')*100+(int)(x_tab[1]-'0')*10+(int)(x_tab[2]-'0');	
-		    y_Atome=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
+	      x_Defected=(int)(x_tab[0]-'0')*100+(int)(x_tab[1]-'0')*10+(int)(x_tab[2]-'0');	
+		    y_Defected=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
+				if(state!=extracting){
+				Set_joint_angles(x_Defected,y_Defected,-100);  
+        state=tracking;			
+        }					
         i=0;
 				}
   /* USER CODE END USART2_IRQn 1 */

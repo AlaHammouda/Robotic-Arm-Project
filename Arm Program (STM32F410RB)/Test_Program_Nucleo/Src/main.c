@@ -81,15 +81,12 @@ osThreadId Stepper1_TaskHandle;
 osThreadId Stepper2_TaskHandle;
 osThreadId Stepper3_TaskHandle;
 osThreadId Stepper4_TaskHandle;
-osThreadId Checking_for_DeHandle;
+osThreadId Main_Arm_TaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
    
-	 
-	#define sleeping    'a'    // 1 step => 0.060944641 ° deg
-	#define tracking    'b'
-	#define extracting  'c'
+	
   #define step1_resolution    0.060944641    // 1 step => 0.060944641 ° deg
 	#define step2_resolution    0.055333713
 	#define step3_resolution    0.054381134
@@ -97,26 +94,33 @@ osThreadId Checking_for_DeHandle;
 	#define x_init    0.00
 	#define y_init    0.00
 	#define z_init    0.00
+	#define O0_init   0.00
 	#define O1_init   0.00
 	#define O2_init   0.00
 	#define O3_init   0.00
-	#define O4_init   0.00
+	#define l1        172.00
+	#define l2  		  162.00
+	#define l3   		  162.00
+	#define l4		    80.00
 	
 	
+	const char sleeping='a';    // 1 step => 0.060944641 ° deg
+	const char tracking ='b';
+	const char extracting='c';
 	
-	float O1,O2,O3,O4=0;              // current angles 
-	float O1_t,O2_t,O3_t,O4_t=0;     // target angles
+	float O0,O1,O2,O3=0;              // current angles 
+	float O0_t,O1_t,O2_t,O3_t=0;     // target angles
 	float x,y,z=0;                  // effector coordinates 
 	char state = sleeping;
+	int Step1_done,Step2_done,Step3_done,Step4_done=0;
 	 
-	 
-    int adc=0;
-		int x_Atome=0;                         
-		int y_Atome=0;
-		int i=0; 
-		char	PC_Data[6];        
-		char	x_tab[3]={0};      
-		char	y_tab[3]={0};
+  int adc=0;
+  int x_Defected=0;                         
+	int y_Defected=0;
+	int i=0; 
+	char	PC_Data[6];        
+	char	x_tab[3]={0};      
+	char	y_tab[3]={0};
 	               
 /* USER CODE END PV */
 
@@ -131,7 +135,7 @@ void Stepper1_Task_function(void const * argument);
 void Stepper2_Task_function(void const * argument);
 void Stepper3_Task_function(void const * argument);
 void Stepper4_Task_function(void const * argument);
-void Checking_for_Defected_Task_function(void const * argument);
+void Main_Arm_Task_function(void const * argument);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -149,8 +153,8 @@ void step_1(int dist,int sens);
 void step_2(int dist,int sens);	 
 void step_3(int dist,int sens);
 void step_4(int dist,int sens);
-void Get_dist_Obstacle(void);	 
-void Get_joint_angles(float xt,float yt,float zt);
+int check_Defected(void);	 
+void Set_joint_angles(float xt,float yt,float zt);
 
 	 	 
 /* USER CODE END PFP */
@@ -277,9 +281,9 @@ HAL_Delay(3000);
   osThreadDef(Stepper4_Task, Stepper4_Task_function, osPriorityIdle, 0, 128);
   Stepper4_TaskHandle = osThreadCreate(osThread(Stepper4_Task), NULL);
 
-  /* definition and creation of Checking_for_De */
-  osThreadDef(Checking_for_De, Checking_for_Defected_Task_function, osPriorityNormal, 0, 128);
-  Checking_for_DeHandle = osThreadCreate(osThread(Checking_for_De), NULL);
+  /* definition and creation of Main_Arm_Task */
+  osThreadDef(Main_Arm_Task, Main_Arm_Task_function, osPriorityNormal, 0, 128);
+  Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -547,7 +551,7 @@ static void MX_GPIO_Init(void)
 		}
 	}
 
-			void step_4(int dist,int sens){
+void step_4(int dist,int sens){
 		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens);
 		for(int i=0;i<dist;i++){
 		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
@@ -558,21 +562,35 @@ static void MX_GPIO_Init(void)
 	}	
 
 	
-void Get_dist_Obstacle(){	
+int check_Defected(){	
 			HAL_ADC_Start(&hadc1);
-		  adc=HAL_ADC_GetValue(&hadc1);							
+		  adc=HAL_ADC_GetValue(&hadc1);	
+      return (adc<100);	
 		}
 
 		
-void  get_joint_angles(float xt,float yt , float zt){
-
+void  Set_joint_angles(float xt,float yt , float zt){
+	O0_t=O0;  //f(xt,yt,zt)  // Tommorrow done !! 
 	O1_t=O1;
-	O1_t=O1;
-	O1_t=O1;
-	O1_t=O1;
-	
+	O2_t=O1;
+	O3_t=O1;	
 }	
 		
+void Get_Defected(){
+	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);   // pump ON
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);
+		for(int i=0;i<200;i++){
+		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);Delay_micros(500);
+     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);Delay_micros(500);
+		}
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,0);
+		for(int i=0;i<200;i++){
+		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);Delay_micros(500);
+     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);Delay_micros(500);
+		}
+}
+
+
 
 /* USER CODE END 4 */
 
@@ -595,16 +613,21 @@ void Stepper1_Task_function(void const * argument)
   /* USER CODE BEGIN Stepper1_Task_function */
   /* Infinite loop */
   for(;;)
-  {	
-		if((O1<O1_t-0.1)||(O1>O1_t+0.1)){
-		if(O1<O1_t){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); O1+=step1_resolution; }
-		else{       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); O1-=step1_resolution; }	
+  {	 
+		if((O0<O0_t-0.1)||(O0>O0_t+0.1)){
+		if(O0<O0_t){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); O0+=step1_resolution; }
+		else{       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); O0-=step1_resolution; }	
 		
 		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
      Delay_micros(500);
     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
      Delay_micros(500);
+	  	Step1_done=0;
     }
+		else{
+			Step1_done=1;
+		 }
+			
 
 	}
   /* USER CODE END Stepper1_Task_function */
@@ -646,16 +669,37 @@ void Stepper4_Task_function(void const * argument)
   /* USER CODE END Stepper4_Task_function */
 }
 
-/* Checking_for_Defected_Task_function function */
-void Checking_for_Defected_Task_function(void const * argument)
+/* Main_Arm_Task_function function */
+void Main_Arm_Task_function(void const * argument)
 {
-  /* USER CODE BEGIN Checking_for_Defected_Task_function */
+  /* USER CODE BEGIN Main_Arm_Task_function */
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    x=(l1*cos(O1)+l2*cos(O2)+l3*cos(O3))*cos(O0);
+		y=(l1*cos(O1)+l2*cos(O2)+l3*cos(O3))*sin(O0);
+		z=l1*sin(O1)+l2*sin(O2)+l3*sin(O3);
+		
+		if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking )
+		{
+			if(check_Defected()){
+				state=extracting;
+				Get_Defected();
+				Set_joint_angles(500,500,422);			
+			}
+			else{
+				Set_joint_angles(x_init,y_init,z_init); state=sleeping;			
+			}
+		}
+		
+		if(Step1_done && Step2_done && Step3_done && Step4_done && state==extracting )
+		{		
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
+			Set_joint_angles(x_init,y_init,z_init); state=sleeping;	
+		}
+		
   }
-  /* USER CODE END Checking_for_Defected_Task_function */
+  /* USER CODE END Main_Arm_Task_function */
 }
 
 /**
