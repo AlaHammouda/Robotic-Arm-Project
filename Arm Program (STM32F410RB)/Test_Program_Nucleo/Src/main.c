@@ -113,8 +113,14 @@ osThreadId Main_Arm_TaskHandle;
 	float x,y,z=0;                  // effector coordinates 
 	char state = sleeping;
 	int Step1_done,Step2_done,Step3_done,Step4_done=0;
-	 
-  int adc=0;
+	
+	int sens_1=1; 
+  int sens_2=1;	
+	int sens_3=1; 
+  int sens_4=1;
+	
+	
+	int adc=0;
   int x_Defected=0;                         
 	int y_Defected=0;
 	int i=0; 
@@ -615,15 +621,19 @@ void Stepper1_Task_function(void const * argument)
   for(;;)
   {	 
 		if((O0<O0_t-0.1)||(O0>O0_t+0.1)){
-		if(O0<O0_t){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); O0+=step1_resolution; }
-		else{       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); O0-=step1_resolution; }	
 		
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-     Delay_micros(500);
-    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-     Delay_micros(500);
-	  	Step1_done=0;
-    }
+
+			if((O0<O0_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(500); sens_1= 1; }
+			if((O0>O0_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(500);  sens_1= -1;}	
+		
+		
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
+			Delay_micros(500);
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
+			Delay_micros(500);
+	    O0+=(step1_resolution*sens_1);   
+  		Step1_done=0;
+     }
 		else{
 			Step1_done=1;
 		 }
