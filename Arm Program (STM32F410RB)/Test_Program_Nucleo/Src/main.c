@@ -98,10 +98,10 @@ osThreadId Main_Arm_TaskHandle;
 	#define O1_init   0.00
 	#define O2_init   0.00
 	#define O3_init   0.00
-	#define l1        172.00
-	#define l2  		  162.00
-	#define l3   		  162.00
-	#define l4		    80.00
+	
+	#define l1  		  162.00
+	#define l2   		  162.00
+	#define l3		    80.00
 	
 	
 	const char sleeping='a';    // 1 step => 0.060944641 ° deg
@@ -575,11 +575,19 @@ int check_Defected(){
 		}
 
 		
-void  Set_joint_angles(float xt,float yt , float zt){
-	O0_t=O0;  //f(xt,yt,zt)  // Tommorrow done !! 
+void  Set_joint_angles(float xt,float yt , float zt){	
+	
+	// General Module 
+	/*O0_t=O0;  //f(xt,yt,zt) 
 	O1_t=O1;
 	O2_t=O1;
-	O3_t=O1;	
+	O3_t=-90.0;	*/
+	
+	// project Module 
+	O0_t=O0;                     //f(xt,yt,zt)  // Tommorrow done !! 
+	O1_t=O1;
+	O2_t=O1;
+	O3_t=-90.0;	
 }	
 		
 void Get_Defected(){
@@ -622,15 +630,13 @@ void Stepper1_Task_function(void const * argument)
   {	 
 		if((O0<O0_t-0.1)||(O0>O0_t+0.1)){
 		
-
-			if((O0<O0_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(500); sens_1= 1; }
-			if((O0>O0_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(500);  sens_1= -1;}	
-		
+			if((O0<O0_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(1000); sens_1= 1; }
+			if((O0>O0_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(1000);  sens_1= -1;}	
 		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-			Delay_micros(500);
+			osDelay(1);   // equal to 500 micro-second !!!
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-			Delay_micros(500);
+			osDelay(1);
 	    O0+=(step1_resolution*sens_1);   
   		Step1_done=0;
      }

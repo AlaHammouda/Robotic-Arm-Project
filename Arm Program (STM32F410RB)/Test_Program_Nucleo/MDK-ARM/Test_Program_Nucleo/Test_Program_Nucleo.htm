@@ -3,7 +3,7 @@
 <title>Static Call Graph - [Test_Program_Nucleo\Test_Program_Nucleo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Test_Program_Nucleo\Test_Program_Nucleo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Dec 19 18:34:57 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Dec 22 21:18:29 2019
 <BR><P>
 <H3>Maximum Stack Usage =        320 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -531,8 +531,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[61]"></a>Delay_micros</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, main.o(i.Delay_micros))
-<BR><BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper1_Task_function
-<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Defected
+<BR><BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Defected
 </UL>
 
 <P><STRONG><a name="[5f]"></a>Get_Defected</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, main.o(i.Get_Defected))
@@ -855,7 +854,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[92]"></a>Set_joint_angles</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, main.o(i.Set_joint_angles))
+<P><STRONG><a name="[92]"></a>Set_joint_angles</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, main.o(i.Set_joint_angles))
 <BR><BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART2_IRQHandler
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Main_Arm_Task_function
 </UL>
@@ -871,7 +870,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[46]"></a>Stepper1_Task_function</STRONG> (Thumb, 278 bytes, Stack size 16 bytes, main.o(i.Stepper1_Task_function))
+<P><STRONG><a name="[46]"></a>Stepper1_Task_function</STRONG> (Thumb, 272 bytes, Stack size 16 bytes, main.o(i.Stepper1_Task_function))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = Stepper1_Task_function &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -884,7 +883,6 @@ Global Symbols
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmple
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_micros
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
