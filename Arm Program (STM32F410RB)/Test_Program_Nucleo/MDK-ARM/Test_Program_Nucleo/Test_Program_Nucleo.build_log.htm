@@ -52,39 +52,43 @@ compiling main.c...
   		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
 ../Src/main.c(565): warning:  #188-D: enumerated type mixed with another type
        HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
-../Src/main.c(594): warning:  #188-D: enumerated type mixed with another type
+../Src/main.c(589): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	float b=zt+l3;
+../Src/main.c(594): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	O2_t=acos(x/l2*cos(O0_t)-l1/l2*cos(O1_t));
+../Src/main.c(599): warning:  #188-D: enumerated type mixed with another type
   	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);   // pump ON
-../Src/main.c(595): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);
-../Src/main.c(597): warning:  #188-D: enumerated type mixed with another type
-  		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);Delay_micros(500);
-../Src/main.c(598): warning:  #188-D: enumerated type mixed with another type
-       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);Delay_micros(500);
 ../Src/main.c(600): warning:  #188-D: enumerated type mixed with another type
-  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,0);
+  	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);
 ../Src/main.c(602): warning:  #188-D: enumerated type mixed with another type
   		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);Delay_micros(500);
 ../Src/main.c(603): warning:  #188-D: enumerated type mixed with another type
        HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);Delay_micros(500);
-../Src/main.c(631): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Src/main.c(605): warning:  #188-D: enumerated type mixed with another type
+  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,0);
+../Src/main.c(607): warning:  #188-D: enumerated type mixed with another type
+  		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);Delay_micros(500);
+../Src/main.c(608): warning:  #188-D: enumerated type mixed with another type
+       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);Delay_micros(500);
+../Src/main.c(636): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if((O0<O0_t-0.1)||(O0>O0_t+0.1)){
-../Src/main.c(631): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Src/main.c(636): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if((O0<O0_t-0.1)||(O0>O0_t+0.1)){
-../Src/main.c(633): warning:  #188-D: enumerated type mixed with another type
-  			if((O0<O0_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(1000); sens_1= 1; }
-../Src/main.c(634): warning:  #188-D: enumerated type mixed with another type
-  			if((O0>O0_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(1000);  sens_1= -1;}	
-../Src/main.c(636): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
 ../Src/main.c(638): warning:  #188-D: enumerated type mixed with another type
+  			if((O0<O0_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(1000); sens_1= 1; }
+../Src/main.c(639): warning:  #188-D: enumerated type mixed with another type
+  			if((O0>O0_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(1000);  sens_1= -1;}	
+../Src/main.c(641): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
+../Src/main.c(643): warning:  #188-D: enumerated type mixed with another type
   			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-../Src/main.c(713): warning:  #188-D: enumerated type mixed with another type
+../Src/main.c(722): warning:  #188-D: enumerated type mixed with another type
   			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
-../Src/main.c: 26 warnings, 0 errors
+../Src/main.c: 28 warnings, 0 errors
 linking...
-Program Size: Code=14856 RO-data=1020 RW-data=236 ZI-data=16884  
+Program Size: Code=20624 RO-data=1396 RW-data=232 ZI-data=16880  
 FromELF: creating hex file...
-"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 26 Warning(s).
+"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 28 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -107,7 +111,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

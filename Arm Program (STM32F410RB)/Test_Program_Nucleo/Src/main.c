@@ -583,10 +583,15 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O2_t=O1;
 	O3_t=-90.0;	*/
 	
-	// project Module 
-	O0_t=O0;                     //f(xt,yt,zt)  // Tommorrow done !! 
-	O1_t=O1;
-	O2_t=O1;
+	// project Module      // !!!!!!!!!!!!!! under test ( rad to deg !!! singularitires !!!! .. !!!!!!!!!!)
+	
+	float a=sqrt(xt*xt+yt*yt);
+	float b=zt+l3;
+	float c=(pow(l2,2)-pow(l1,2)-pow(a,2)-pow(b,2))/(-2*l1);
+	
+	if(xt==0) O0_t=90; else O0_t=atan(yt/xt);
+	O1_t=2*atan((b-sqrt(pow(a,2)+pow(b,2)-pow(c,2)))/(a+c));
+	O2_t=acos(x/l2*cos(O0_t)-l1/l2*cos(O1_t));
 	O3_t=-90.0;	
 }	
 		
@@ -691,10 +696,14 @@ void Main_Arm_Task_function(void const * argument)
   /* USER CODE BEGIN Main_Arm_Task_function */
   /* Infinite loop */
   for(;;)
-  {
+  {/*                                                       general modal 
     x=(l1*cos(O1)+l2*cos(O2)+l3*cos(O3))*cos(O0);
 		y=(l1*cos(O1)+l2*cos(O2)+l3*cos(O3))*sin(O0);
-		z=l1*sin(O1)+l2*sin(O2)+l3*sin(O3);
+		z=l1*sin(O1)+l2*sin(O2)+l3*sin(O3);*/		
+		                                                       //Project modal   
+    x=(l1*cos(O1)+l2*cos(O2))*cos(O0);
+		y=(l1*cos(O1)+l2*cos(O2))*sin(O0);
+		z=l1*sin(O1)+l2*sin(O2)-l3;
 		
 		if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking )
 		{
