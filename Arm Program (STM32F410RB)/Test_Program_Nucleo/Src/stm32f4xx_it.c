@@ -4,7 +4,7 @@
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2019 STMicroelectronics
+  * COPYRIGHT(c) 2020 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -118,7 +118,7 @@ void USART2_IRQHandler(void)
 	      x_Defected=(int)(x_tab[0]-'0')*100+(int)(x_tab[1]-'0')*10+(int)(x_tab[2]-'0');	
 		    y_Defected=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
 				if(state!=extracting){
-				Set_joint_angles(x_Defected,y_Defected,-100);  
+				Set_joint_angles(x_Defected,y_Defected,-500);  
         state=tracking;			
         }					
         i=0;
