@@ -27,7 +27,90 @@ Project File Date:  01/11/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Test_Program_Nucleo'
-"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 0 Warning(s).
+compiling main.c...
+../Src/main.c(294): warning:  #177-D: variable "os_thread_def_Main_Arm_Task"  was declared but never referenced
+    osThreadDef(Main_Arm_Task, Main_Arm_Task_function, osPriorityNormal, 0, 128);
+../Src/main.c(527): warning:  #188-D: enumerated type mixed with another type
+  		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens);
+../Src/main.c(529): warning:  #188-D: enumerated type mixed with another type
+  		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
+../Src/main.c(531): warning:  #188-D: enumerated type mixed with another type
+       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
+../Src/main.c(538): warning:  #188-D: enumerated type mixed with another type
+  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens);
+../Src/main.c(540): warning:  #188-D: enumerated type mixed with another type
+  		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
+../Src/main.c(542): warning:  #188-D: enumerated type mixed with another type
+       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
+../Src/main.c(548): warning:  #188-D: enumerated type mixed with another type
+  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens);
+../Src/main.c(550): warning:  #188-D: enumerated type mixed with another type
+  		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
+../Src/main.c(552): warning:  #188-D: enumerated type mixed with another type
+       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
+../Src/main.c(558): warning:  #188-D: enumerated type mixed with another type
+  		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens);
+../Src/main.c(560): warning:  #188-D: enumerated type mixed with another type
+  		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
+../Src/main.c(562): warning:  #188-D: enumerated type mixed with another type
+       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
+../Src/main.c(590): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	float b=zt+l4;
+../Src/main.c(594): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	if(xt==0) O3_t=acos(yt/l3-l2/l3*cos(O2_t)); else O3_t=acos(xt/(l3*cos(O1_t))-l2/l3*cos(O2_t));
+../Src/main.c(605): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON
+../Src/main.c(606): warning:  #188-D: enumerated type mixed with another type
+  	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1);    
+../Src/main.c(608): warning:  #188-D: enumerated type mixed with another type
+  		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);osDelay(1);
+../Src/main.c(609): warning:  #188-D: enumerated type mixed with another type
+        HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);osDelay(1);
+../Src/main.c(611): warning:  #188-D: enumerated type mixed with another type
+  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,0);
+../Src/main.c(613): warning:  #188-D: enumerated type mixed with another type
+  		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);osDelay(1);
+../Src/main.c(614): warning:  #188-D: enumerated type mixed with another type
+        HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);osDelay(1);
+../Src/main.c(643): warning:  #188-D: enumerated type mixed with another type
+  			if((O1<O1_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(1500); sens_1= 1; }
+../Src/main.c(644): warning:  #188-D: enumerated type mixed with another type
+  			if((O1>O1_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(1500);  sens_1= -1;}		
+../Src/main.c(645): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
+../Src/main.c(647): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
+../Src/main.c(668): warning:  #188-D: enumerated type mixed with another type
+  			if((O2<O2_t)&&(sens_2==-1)){	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1); osDelay(1500); sens_2= 1; }
+../Src/main.c(669): warning:  #188-D: enumerated type mixed with another type
+  			if((O2>O2_t)&&(sens_2==1)){		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,0); osDelay(1500);  sens_2= -1;}		
+../Src/main.c(670): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
+../Src/main.c(672): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
+../Src/main.c(691): warning:  #188-D: enumerated type mixed with another type
+  			if((O3<O3_t)&&(sens_3==-1)){HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1); osDelay(1500); sens_3= 1; }
+../Src/main.c(692): warning:  #188-D: enumerated type mixed with another type
+  			if((O3>O3_t)&&(sens_3==1)){HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0); osDelay(1500);  sens_3= -1;}		
+../Src/main.c(693): warning:  #188-D: enumerated type mixed with another type
+  			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
+../Src/main.c(695): warning:  #188-D: enumerated type mixed with another type
+  			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
+../Src/main.c(714): warning:  #188-D: enumerated type mixed with another type
+  			if((O4<O4_t)&&(sens_4==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,1);osDelay(1500); sens_4= 1; }
+../Src/main.c(715): warning:  #188-D: enumerated type mixed with another type
+  			if((O4>O4_t)&&(sens_4==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,0); osDelay(1500);  sens_4= -1;}		
+../Src/main.c(716): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
+../Src/main.c(718): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
+../Src/main.c(756): warning:  #188-D: enumerated type mixed with another type
+  			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
+../Src/main.c: 39 warnings, 0 errors
+linking...
+Program Size: Code=17988 RO-data=1248 RW-data=284 ZI-data=16884  
+FromELF: creating hex file...
+"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 39 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -50,7 +133,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>
