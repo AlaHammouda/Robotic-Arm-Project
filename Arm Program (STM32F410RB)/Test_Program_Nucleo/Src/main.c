@@ -104,7 +104,7 @@ osThreadId Main_Arm_TaskHandle;
 	
 	#define l2  		  162.00
 	#define l3   		  162.00
-	#define l4		    80.00
+	#define l4		    100.00
 	
 	
 	const char sleeping='a';    // 1 step => 0.060944641 ° deg
@@ -292,7 +292,7 @@ HAL_Delay(3000);
 
   /* definition and creation of Main_Arm_Task */
   osThreadDef(Main_Arm_Task, Main_Arm_Task_function, osPriorityNormal, 0, 128);
-  //Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
+  Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -302,10 +302,12 @@ HAL_Delay(3000);
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
  
-O1_t=180;
+
   /* Start scheduler */
-  osKernelStart();
-  
+  //osKernelStart();
+ Set_joint_angles(324,0,-90);
+ // Set_joint_angles(120,150.105,100.10);
+
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
@@ -586,12 +588,21 @@ int check_Defected(){
 		
 void  Set_joint_angles(float xt,float yt , float zt){		
 	// project Module   	
-	float a=sqrt(xt*xt+yt*yt);                                                           
-	float b=zt+l4;
-	float c=(l3*l3-l2*l2-a*a-b*b)/(-2*l2);
-	if(xt==0) O1_t=PI/2*sign(yt); else  O1_t=atan(yt/xt);
-	O2_t=2*atan((b-sqrt(a*a+b*b-c*c))/(a+c));
-	if(xt==0) O3_t=acos(yt/l3-l2/l3*cos(O2_t)); else O3_t=acos(xt/(l3*cos(O1_t))-l2/l3*cos(O2_t));
+	float a=sqrt(xt*xt+yt*yt);
+	float sphere_radius=sqrt(a*a+(zt+l4)*(zt+l4));
+	float alpha=(a*a+(zt+l4)*(zt+l4)+l3*l3-l2*l2)/(2*l3);                                                           
+	float beta=atan((zt+l4)/a);
+
+	if(sphere_radius<=324){                 // authorised area that the robotic arm can attend 
+	
+  if(xt==0) O1_t=PI/2*sign(yt); else  O1_t=atan(yt/xt);
+	O2_t=acos(alpha/sphere_radius)+beta;
+	O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
+
+	  x=(l2*cos(O2_t)+l3*cos(O3_t))*cos(O1_t);     // we not need them ??
+		y=(l2*cos(O2_t)+l3*cos(O3_t))*sin(O1_t);
+		z=l2*sin(O2_t)+l3*sin(O3_t)-l4;
+	
 	
 	O1_t=rad_to_deg(O1_t);
 	O2_t=rad_to_deg(O2_t);
@@ -600,6 +611,8 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	
 	Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
 }	
+	
+}
 		
 void Get_Defected(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON
