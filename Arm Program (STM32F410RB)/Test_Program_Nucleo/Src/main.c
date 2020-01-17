@@ -303,12 +303,17 @@ HAL_Delay(3000);
   /* USER CODE END RTOS_QUEUES */
  
 
-  /* Start scheduler */
-  //osKernelStart();
- Set_joint_angles(324,0,-90);
- // Set_joint_angles(120,150.105,100.10);
+/* Start scheduler */
 
-  /* We should never get here as control is now taken by the scheduler */
+// Set_joint_angles(324,0,-90);
+O1_t=-180;
+O2_t=-90;
+O3_t=-90;
+O4_t=-90;
+osKernelStart();
+
+
+ /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -599,7 +604,7 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O2_t=acos(alpha/sphere_radius)+beta;
 	O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
 
-	  x=(l2*cos(O2_t)+l3*cos(O3_t))*cos(O1_t);     // we not need them ??
+	  x=(l2*cos(O2_t)+l3*cos(O3_t))*cos(O1_t);     //  will be deleted !! !!
 		y=(l2*cos(O2_t)+l3*cos(O3_t))*sin(O1_t);
 		z=l2*sin(O2_t)+l3*sin(O3_t)-l4;
 	
@@ -652,9 +657,10 @@ void Stepper1_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {	 
-		if(fabs(O1_t-O1)>0.1){		
-			if((O1<O1_t)&&(sens_1==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,1); osDelay(1500); sens_1= 1; }
-			if((O1>O1_t)&&(sens_1==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,0); osDelay(1500);  sens_1= -1;}		
+		if(fabs(O1_t-O1)>0.07){		
+		if((O1<O1_t)&&(sens_1==-1)){osDelay(1500); sens_1= 1; }
+		if((O1>O1_t)&&(sens_1==1)){osDelay(1500);  sens_1= -1;}		
+      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
@@ -664,7 +670,8 @@ void Stepper1_Task_function(void const * argument)
      }
 		else{
 			Step1_done=1;
-		 }
+		  osDelay(1);
+		}
 			
 	}
   /* USER CODE END Stepper1_Task_function */
@@ -677,9 +684,10 @@ void Stepper2_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    	if(fabs(O2_t-O2)>0.1){		
-			if((O2<O2_t)&&(sens_2==-1)){	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1); osDelay(1500); sens_2= 1; }
-			if((O2>O2_t)&&(sens_2==1)){		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,0); osDelay(1500);  sens_2= -1;}		
+    	if(fabs(O2_t-O2)>0.07){		
+			if((O2>O2_t)&&(sens_2==1)){	 osDelay(1500); sens_2= -1; }
+			if((O2<O2_t)&&(sens_2==-1)){ osDelay(1500);  sens_2= 1;}	
+      HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
@@ -688,6 +696,7 @@ void Stepper2_Task_function(void const * argument)
      }
 		else{
 			Step2_done=1;
+			osDelay(1);
 		 }
   }
   /* USER CODE END Stepper2_Task_function */
@@ -700,9 +709,10 @@ void Stepper3_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    	if(fabs(O3_t-O3)>0.1){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1); osDelay(1500); sens_3= 1; }
-			if((O3>O3_t)&&(sens_3==1)){HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0); osDelay(1500);  sens_3= -1;}		
+    	if(fabs(O3_t-O3)>0.07){		
+			if((O3<O3_t)&&(sens_3==-1)){osDelay(1500); sens_3= 1; }
+			if((O3>O3_t)&&(sens_3==1)){osDelay(1500);  sens_3=-1;}		
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
@@ -711,7 +721,8 @@ void Stepper3_Task_function(void const * argument)
      }
 		else{
 			Step3_done=1;
-		 }
+	    osDelay(1);
+		}
   }
   /* USER CODE END Stepper3_Task_function */
 }
@@ -723,9 +734,10 @@ void Stepper4_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    	if(fabs(O4_t-O4)>0.1){		
-			if((O4<O4_t)&&(sens_4==-1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,1);osDelay(1500); sens_4= 1; }
-			if((O4>O4_t)&&(sens_4==1)){HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,0); osDelay(1500);  sens_4= -1;}		
+    	if(fabs(O4_t-O4)>0.07){		
+			if((O4<O4_t)&&(sens_4==-1)){osDelay(1500); sens_4= 1; }
+			if((O4>O4_t)&&(sens_4==1)){ osDelay(1500);  sens_4= -1;}	
+      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens_4-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
@@ -734,6 +746,7 @@ void Stepper4_Task_function(void const * argument)
      }
 		else{
 			Step4_done=1;
+		  osDelay(1);
 		 }
   }
   /* USER CODE END Stepper4_Task_function */
