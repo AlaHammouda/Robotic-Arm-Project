@@ -58,15 +58,6 @@
 	#include <stdlib.h>
 	#include <stdio.h>	
 	
-
-	
-	// step1 360 °    ->  5907-steps  done !!!
-  // step2 194 ° ->  3506-steps          .....    55 
-  // step3 227.15 ° ->  4177-steps  done !!!
-  // step4 360 °    ->  6490-steps presque done ? !!!
-
-	
-	
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -85,11 +76,11 @@ osThreadId Main_Arm_TaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-   
+ 
 	#define PI 									3.141592653
   #define step1_resolution    0.060944641    // 1 step => 0.060944641 ° deg
 	#define step2_resolution    0.055333713
-	#define step3_resolution    0.054381134
+	#define step3_resolution    0.05530133    // not yet done 
 	#define step4_resolution    0.055469953
 	#define x_init         0.00
 	#define y_init         0.00
@@ -104,15 +95,21 @@ osThreadId Main_Arm_TaskHandle;
 	
 	#define l2  		  162.00
 	#define l3   		  162.00
-	#define l4		    100.00
+	#define l4		    94.50
 	
 	
 	const char sleeping='a';    // 1 step => 0.060944641 ° deg
 	const char tracking ='b';
 	const char extracting='c';
 	
-	double O1,O2,O3,O4=0;              // current angles 
-	double O1_t,O2_t,O3_t,O4_t=0;     // target angles
+	double O1=0;              // current angles 
+	double O2=-35.2;  
+	double O3=60.1;  
+	double O4=-90;  
+	double O1_t=0;
+	double O2_t=90;
+	double O3_t=-35;
+	double O4_t=-90;
 	float x,y,z=0;                  // effector coordinates 
 	char state = sleeping;
 	int Step1_done,Step2_done,Step3_done,Step4_done = 0;
@@ -121,7 +118,6 @@ osThreadId Main_Arm_TaskHandle;
   int sens_2=1;	
 	int sens_3=1; 
   int sens_4=1;
-	
 	
 	int adc=0;
   int x_Defected=0;                         
@@ -156,16 +152,9 @@ void Main_Arm_Task_function(void const * argument);
    #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f) 
 #endif 
 	 
-	 
-
-void step_1(int dist,int sens);
-void step_2(int dist,int sens);	 
-void step_3(int dist,int sens);
-void step_4(int dist,int sens);
 int check_Defected(void);	 
 void Set_joint_angles(float xt,float yt,float zt);
 
-	 	 
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -211,50 +200,6 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
  	__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
- 
-  //step_3(2*5907,0);
-
-	
-/*
-step_2(994,1);//76
-HAL_Delay(2000);
-step_2(2512,1);//76
-HAL_Delay(2000);
-step_2(2512,0);//76 
-HAL_Delay(2000);
-step_2(994,0);//76 
-HAL_Delay(2000);
-*/
-
-/*
-step_3(2467,1);//76
-HAL_Delay(2000);
-step_3(1710,1);
-HAL_Delay(2000);
-step_3(1710,0);
-HAL_Delay(2000);
-step_3(2467,0);
-HAL_Delay(2000);
-*/
-/*
- step_1(1477,0);
-HAL_Delay(1000);
- step_1(1477,0); // step1 360 °
-HAL_Delay(1000);
- step_1(1477,0);
-HAL_Delay(1000);
- step_1(1476,0); // step1 360 °
-HAL_Delay(3000);
- step_1(5907,1); // step1 360 °
-*/
-/*
- step_2(1200,1);205.38
- step_1(1800,0);
- step_2(600,0);
- step_3(1300,1);
- step_4(800,1);
- */
- 
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -306,12 +251,12 @@ HAL_Delay(3000);
 /* Start scheduler */
 
 // Set_joint_angles(324,0,-90);
-O1_t=-180;
-O2_t=-90;
-O3_t=-90;
-O4_t=-90;
-osKernelStart();
+//O1_t=-360;
+//O2_t=-45;
+//O3_t=45;
+//O4_t=-90;
 
+osKernelStart();
 
  /* We should never get here as control is now taken by the scheduler */
 
@@ -529,49 +474,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-		
-	void step_1(int dist,int sens){
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens);
-		for(int i=0;i<dist;i++){
-		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-     osDelay(1);
-     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-     osDelay(1);
-		}
-	}
-	
-		
-		void step_2(int dist,int sens){
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens);
-		for(int i=0;i<dist;i++){
-		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-    osDelay(1);
-     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-     osDelay(1);
-		}
-	}
-		
-		void step_3(int dist,int sens){
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens);
-		for(int i=0;i<dist;i++){
-		 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
-     osDelay(1);
-     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
-    osDelay(1);
-		}
-	}
-
-void step_4(int dist,int sens){
-		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens);
-		for(int i=0;i<dist;i++){
-		 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
-     osDelay(1);
-     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
-     osDelay(1);
-		}
-	}	
-
-	
 int sign(float n){
 	if(n>=0)
 		return 1;
@@ -583,14 +485,12 @@ float rad_to_deg(double x){
 				return(x*360/(2*PI));
 			}
 
-
 int check_Defected(){	
 			HAL_ADC_Start(&hadc1);
 		  adc=HAL_ADC_GetValue(&hadc1);	
       return (adc<100);	
 		}
 
-		
 void  Set_joint_angles(float xt,float yt , float zt){		
 	// project Module   	
 	float a=sqrt(xt*xt+yt*yt);
@@ -603,12 +503,11 @@ void  Set_joint_angles(float xt,float yt , float zt){
   if(xt==0) O1_t=PI/2*sign(yt); else  O1_t=atan(yt/xt);
 	O2_t=acos(alpha/sphere_radius)+beta;
 	O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
-
-	  x=(l2*cos(O2_t)+l3*cos(O3_t))*cos(O1_t);     //  will be deleted !! !!
+		
+	  /*x=(l2*cos(O2_t)+l3*cos(O3_t))*cos(O1_t);     //  will be deleted !! !!
 		y=(l2*cos(O2_t)+l3*cos(O3_t))*sin(O1_t);
-		z=l2*sin(O2_t)+l3*sin(O3_t)-l4;
-	
-	
+		z=l2*sin(O2_t)+l3*sin(O3_t)-l4;*/
+		
 	O1_t=rad_to_deg(O1_t);
 	O2_t=rad_to_deg(O2_t);
 	O3_t=rad_to_deg(O3_t);
@@ -616,7 +515,6 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	
 	Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
 }	
-	
 }
 		
 void Get_Defected(){
@@ -640,7 +538,6 @@ void Get_Defected(){
 /* StartDefaultTask function */
 void StartDefaultTask(void const * argument)
 {
-
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
