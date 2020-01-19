@@ -42,14 +42,22 @@
 	extern	int y_Defected;
 	extern  int i;
 
-	extern	char	PC_Data[6];        
+	extern	char	PC_Data[6];  
+  extern  char  cmd_Data[12];	
 	extern	char	x_tab[3];        
-	extern	char	y_tab[3];       
+	extern	char	y_tab[3];
+  extern	char	x_cmd[4];	
+	extern	char	y_cmd[4];	
+	extern	char	z_cmd[4];	
+	extern  float x;
+	extern  float y;
+	extern  float z;
 	extern  char  state;
   extern  const char  extracting;	
   extern  const char  sleeping;   // 1 step => 0.060944641 ° deg
 	extern  const char  tracking;
   extern  void Set_joint_angles(float xt,float yt,float zt);
+	
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -107,22 +115,32 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-	HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,6);  i++;
-	      x_tab[0]=PC_Data[0];       
-        x_tab[1]=PC_Data[1];  
-        x_tab[2]=PC_Data[2];
-	      y_tab[0]=PC_Data[3];   
-				y_tab[1]=PC_Data[4];
-				y_tab[2]=PC_Data[5];
-	      if(i==6){
-	      x_Defected=(int)(x_tab[0]-'0')*100+(int)(x_tab[1]-'0')*10+(int)(x_tab[2]-'0');	
-		    y_Defected=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
-				if(state!=extracting){
-				Set_joint_angles(x_Defected,y_Defected,-500);  
-        state=tracking;			
-        }					
-        i=0;
-				}
+	       HAL_UART_Receive_IT(&huart2,(uint8_t *)&cmd_Data,12); i++;        
+	        if(i==13){
+           x_cmd[0]=cmd_Data[0];x_cmd[1]=cmd_Data[1];x_cmd[2]=cmd_Data[2];x_cmd[3]=cmd_Data[3];			     
+	         y_cmd[0]=cmd_Data[4];y_cmd[1]=cmd_Data[5];y_cmd[2]=cmd_Data[6];y_cmd[3]=cmd_Data[7];			         
+	         z_cmd[0]=cmd_Data[8];z_cmd[1]=cmd_Data[9];z_cmd[2]=cmd_Data[10];z_cmd[3]=cmd_Data[11];
+	         x=atoi(x_cmd); (int)(x_cmd[0])*1000+(int)(x_cmd[1])*100+(int)(x_cmd[2])*10+(int)(x_cmd[3]);	
+	         y=atoi(y_cmd);
+	         z=atoi(z_cmd);		
+					 i=0;}
+					/*
+				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,6);  i++;
+						x_tab[0]=PC_Data[0];       
+						x_tab[1]=PC_Data[1];  
+						x_tab[2]=PC_Data[2];
+						y_tab[0]=PC_Data[3];   
+						y_tab[1]=PC_Data[4];
+						y_tab[2]=PC_Data[5];
+						if(i==6){
+						x_Defected=(int)(x_tab[0]-'0')*100+(int)(x_tab[1]-'0')*10+(int)(x_tab[2]-'0');	
+						y_Defected=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
+						if(state!=extracting){
+						Set_joint_angles(x_Defected,y_Defected,-500);  
+						state=tracking;			
+						}					
+						i=0;
+						}*/
   /* USER CODE END USART2_IRQn 1 */
 }
 

@@ -123,10 +123,13 @@ osThreadId Main_Arm_TaskHandle;
   int x_Defected=0;                         
 	int y_Defected=0;
 	int i=0; int nb=0;
-	char	PC_Data[6];        
+	char	PC_Data[6];
+  char  cmd_Data[12];	
 	char	x_tab[3]={0};      
 	char	y_tab[3]={0};
-	               
+	char	x_cmd[4]={0};     
+	char	y_cmd[4]={0};
+ 	char	z_cmd[4]={0};   
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -250,8 +253,8 @@ int main(void)
 
 /* Start scheduler */
 
-// Set_joint_angles(324,0,-90);
-//O1_t=-360;
+ //Set_joint_angles(0,-200,-180);
+//O1_t=-45;
 //O2_t=-45;
 //O3_t=45;
 //O4_t=-90;
@@ -543,6 +546,7 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
     osDelay(1); // 500 us
+		//Set_joint_angles(200,0,-60);
   }
   /* USER CODE END 5 */ 
 }
@@ -658,9 +662,9 @@ void Main_Arm_Task_function(void const * argument)
   {
 		osDelay(1);
                //Project modal   
-    x=(l2*cos(O2)+l3*cos(O3))*cos(O1);     // we not need them ??
-		y=(l2*cos(O2)+l3*cos(O3))*sin(O1);
-		z=l2*sin(O2)+l3*sin(O3)-l4;
+    //x=(l2*cos(O2)+l3*cos(O3))*cos(O1);     // we not need them ??
+		//y=(l2*cos(O2)+l3*cos(O3))*sin(O1);
+		//z=l2*sin(O2)+l3*sin(O3)-l4;
 		
 		if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking )
 		{

@@ -8,8 +8,7 @@ import imutils
 import time
 import serial
 
-
-#ser = serial.Serial('COM12',baudrate=9600, timeout=1)
+ser = serial.Serial('COM12',baudrate=9600, timeout=1)
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
@@ -41,10 +40,10 @@ while True:
 	# (x, y) center of the ball
 	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 	cnts = imutils.grab_contours(cnts)
-	center = None
+	#center = None
 	#center = (int(50), int(25))
 	#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
-	print(center)
+	#print(center)
 	#ser.write(str.encode(STM_Data))
 	# only proceed if at least one contour was found
 	if len(cnts) > 0:
@@ -60,9 +59,9 @@ while True:
 		if radius > 19:
 			# draw the circle and centroid on the frame,
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
-			#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
+			STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
 			print(center)
-			#ser.write(str.encode(STM_Data))
+			ser.write(str.encode(STM_Data))
 			
 		# loop over the set of tracked points
 	
