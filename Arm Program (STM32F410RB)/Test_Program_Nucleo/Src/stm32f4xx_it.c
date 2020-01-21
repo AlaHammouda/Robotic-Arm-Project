@@ -49,15 +49,14 @@
   extern	char	x_cmd[4];	
 	extern	char	y_cmd[4];	
 	extern	char	z_cmd[4];	
-	extern  float x;
-	extern  float y;
-	extern  float z;
 	extern  char  state;
   extern  const char  extracting;	
   extern  const char  sleeping;   // 1 step => 0.060944641 ° deg
 	extern  const char  tracking;
   extern  void Set_joint_angles(float xt,float yt,float zt);
-	
+	float x_test;
+	float y_test;
+	float z_test;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -116,14 +115,17 @@ void USART2_IRQHandler(void)
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
 	       HAL_UART_Receive_IT(&huart2,(uint8_t *)&cmd_Data,12); i++;        
-	        if(i==13){
+	        if(i==12){
            x_cmd[0]=cmd_Data[0];x_cmd[1]=cmd_Data[1];x_cmd[2]=cmd_Data[2];x_cmd[3]=cmd_Data[3];			     
 	         y_cmd[0]=cmd_Data[4];y_cmd[1]=cmd_Data[5];y_cmd[2]=cmd_Data[6];y_cmd[3]=cmd_Data[7];			         
 	         z_cmd[0]=cmd_Data[8];z_cmd[1]=cmd_Data[9];z_cmd[2]=cmd_Data[10];z_cmd[3]=cmd_Data[11];
-	         x=atoi(x_cmd); (int)(x_cmd[0])*1000+(int)(x_cmd[1])*100+(int)(x_cmd[2])*10+(int)(x_cmd[3]);	
-	         y=atoi(y_cmd);
-	         z=atoi(z_cmd);		
-					 i=0;}
+	         z_test=atoi(z_cmd); z_cmd[0]=' ';z_cmd[1]=' ';z_cmd[2]=' ';z_cmd[3]=' ';
+					 y_test=atoi(y_cmd); y_cmd[0]=' ';y_cmd[1]=' ';y_cmd[2]=' ';y_cmd[3]=' ';
+					 x_test=atoi(x_cmd);							
+					 i=0;
+					 Set_joint_angles(x_test,y_test,z_test);				
+					 state=tracking;
+					  }
 					/*
 				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,6);  i++;
 						x_tab[0]=PC_Data[0];       
