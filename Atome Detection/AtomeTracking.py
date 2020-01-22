@@ -8,14 +8,14 @@ import imutils
 import time
 import serial
 
-ser = serial.Serial('COM12',baudrate=9600, timeout=1)
+#ser = serial.Serial('COM12',baudrate=9600, timeout=1)
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 greenLower = (29, 86, 6)   #(29, 86, 6)  (60, 0, 90) 
 greenUpper = (64, 255, 255) # (64, 255, 255) (115, 20, 190) 
 
-vs = VideoStream(src=0).start()
+vs = VideoStream(src=1).start()
 time.sleep(2.0)
 
 # keep looping
@@ -59,9 +59,9 @@ while True:
 		if radius > 19:
 			# draw the circle and centroid on the frame,
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
-			STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
+			#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
 			print(center)
-			ser.write(str.encode(STM_Data))
+			#ser.write(str.encode(STM_Data))
 			
 		# loop over the set of tracked points
 	
