@@ -1,6 +1,5 @@
 
 # import the necessary packages
-from collections import deque
 from imutils.video import VideoStream
 import numpy as np
 import cv2
@@ -12,8 +11,8 @@ import serial
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
-greenLower = (29, 86, 6)   #(29, 86, 6)  (60, 0, 90) 
-greenUpper = (64, 255, 255) # (64, 255, 255) (115, 20, 190) 
+greenLower = (44,44,134)   #def green (29, 86, 6)    red (0, 50, 20)  blue  (83, 0, 255)
+greenUpper = (72, 255, 255) #def green (64, 255, 255) red (7, 255, 255)  blue  (109, 255, 255)
 
 vs = VideoStream(src=1).start()
 time.sleep(2.0)
@@ -58,7 +57,7 @@ while True:
 		# only proceed if the radius meets a minimum size
 		if radius > 19:
 			# draw the circle and centroid on the frame,
-			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
+			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 0), 2)
 			#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
 			print(center)
 			#ser.write(str.encode(STM_Data))
