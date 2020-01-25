@@ -11,8 +11,8 @@ import serial
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
-greenLower = (44,44,134)   #def green (29, 86, 6)    red (0, 50, 20)  blue  (83, 0, 255)
-greenUpper = (72, 255, 255) #def green (64, 255, 255) red (7, 255, 255)  blue  (109, 255, 255)
+greenLower = (25,44,134)   #def green (25,44,134)    red (0, 50, 20)  blue  (83, 0, 255)
+greenUpper = (72, 255, 255) #def green (72, 255, 255) red (7, 255, 255)  blue  (109, 255, 255)
 
 vs = VideoStream(src=1).start()
 time.sleep(2.0)
@@ -45,6 +45,7 @@ while True:
 	#print(center)
 	#ser.write(str.encode(STM_Data))
 	# only proceed if at least one contour was found
+	time.sleep(0.1)
 	if len(cnts) > 0:
 		# find the largest contour in the mask, then use
 		# it to compute the minimum enclosing circle and
@@ -59,9 +60,12 @@ while True:
 			# draw the circle and centroid on the frame,
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 0), 2)
 			#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
+			Xreal=-0.506*center[1]+327.53
+			Yreal=0.4972*center[0]-155.62
 			print(center)
+			print(Xreal)
+			print(Yreal)
 			#ser.write(str.encode(STM_Data))
-			
 		# loop over the set of tracked points
 	
 	# show the frame to our screen
