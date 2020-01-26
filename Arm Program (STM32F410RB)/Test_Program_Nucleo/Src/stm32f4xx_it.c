@@ -38,8 +38,8 @@
 
 /* USER CODE BEGIN 0 */
 
-	extern	int x_Defected;                           // les variables d'odométries
-	extern	int y_Defected;
+	extern	int x_Green;                           // les variables d'odométries
+	extern	int y_Green;
 	extern  int i;
 
 	extern	char	PC_Data[6];  
@@ -114,7 +114,7 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-	       HAL_UART_Receive_IT(&huart2,(uint8_t *)&cmd_Data,12); i++;        
+	     /*  HAL_UART_Receive_IT(&huart2,(uint8_t *)&cmd_Data,12); i++;        
 	        if(i==12){
            x_cmd[0]=cmd_Data[0];x_cmd[1]=cmd_Data[1];x_cmd[2]=cmd_Data[2];x_cmd[3]=cmd_Data[3];			     
 	         y_cmd[0]=cmd_Data[4];y_cmd[1]=cmd_Data[5];y_cmd[2]=cmd_Data[6];y_cmd[3]=cmd_Data[7];			         
@@ -123,26 +123,30 @@ void USART2_IRQHandler(void)
 					 y_test=atoi(y_cmd); y_cmd[0]=' ';y_cmd[1]=' ';y_cmd[2]=' ';y_cmd[3]=' ';
 					 x_test=atoi(x_cmd);							
 					 i=0;
+						if(y_test>89){y_test+=4;x_test+=8;}
 					 Set_joint_angles(x_test,y_test,z_test);				
 					 state=tracking;
-					  }
-					/*
+					  }*/
+					
 				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,6);  i++;
-						x_tab[0]=PC_Data[0];       
+						x_tab[0]=PC_Data[0];     
 						x_tab[1]=PC_Data[1];  
-						x_tab[2]=PC_Data[2];
-						y_tab[0]=PC_Data[3];   
-						y_tab[1]=PC_Data[4];
-						y_tab[2]=PC_Data[5];
+						x_tab[2]=PC_Data[2];    
+						y_tab[0]=PC_Data[3];     
+						y_tab[1]=PC_Data[4];   
+						y_tab[2]=PC_Data[5];    
 						if(i==6){
-						x_Defected=(int)(x_tab[0]-'0')*100+(int)(x_tab[1]-'0')*10+(int)(x_tab[2]-'0');	
-						y_Defected=(int)(y_tab[0]-'0')*100+(int)(y_tab[1]-'0')*10+(int)(y_tab[2]-'0');
+						y_Green=atoi(y_tab)/1000000;y_tab[0]=' ';y_tab[1]=' ';y_tab[2]=' ';	
+						x_Green=atoi(x_tab);
+						y_Green=0.4972*y_Green-155.623;
+						x_Green=-0.506*x_Green+327.53;
+						if(y_Green>89){y_Green+=4;x_Green+=8;}
 						if(state!=extracting){
-						Set_joint_angles(x_Defected,y_Defected,-500);  
+						Set_joint_angles(x_Green,y_Green,-150);  
 						state=tracking;			
 						}					
 						i=0;
-						}*/
+						}
   /* USER CODE END USART2_IRQn 1 */
 }
 

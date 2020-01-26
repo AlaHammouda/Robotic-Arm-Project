@@ -7,11 +7,11 @@ import imutils
 import time
 import serial
 
-#ser = serial.Serial('COM12',baudrate=9600, timeout=1)
+ser = serial.Serial('COM12',baudrate=9600, timeout=1)
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
-greenLower = (25,44,134)   #def green (25,44,134)    red (0, 50, 20)  blue  (83, 0, 255)
+greenLower = (37,44,134)   #def green (25,44,134)    red (0, 50, 20)  blue  (83, 0, 255)
 greenUpper = (72, 255, 255) #def green (72, 255, 255) red (7, 255, 255)  blue  (109, 255, 255)
 
 vs = VideoStream(src=1).start()
@@ -39,11 +39,6 @@ while True:
 	# (x, y) center of the ball
 	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 	cnts = imutils.grab_contours(cnts)
-	#center = None
-	#center = (int(50), int(25))
-	#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
-	#print(center)
-	#ser.write(str.encode(STM_Data))
 	# only proceed if at least one contour was found
 	time.sleep(0.1)
 	if len(cnts) > 0:
@@ -56,16 +51,13 @@ while True:
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
 		# only proceed if the radius meets a minimum size
-		if radius > 19:
+		if radius > 70:
 			# draw the circle and centroid on the frame,
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 0), 2)
-			#STM_Data = (str(center[0]).zfill(3)) + (str(center[1]).zfill(3))
-			Xreal=-0.506*center[1]+327.53
-			Yreal=0.4972*center[0]-155.62
+			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3))
 			print(center)
-			print(Xreal)
-			print(Yreal)
-			#ser.write(str.encode(STM_Data))
+			print(radius)
+			ser.write(str.encode(STM_Data))
 		# loop over the set of tracked points
 	
 	# show the frame to our screen

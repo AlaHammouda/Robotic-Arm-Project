@@ -103,13 +103,13 @@ osThreadId Main_Arm_TaskHandle;
 	const char extracting='c';
 	
 	double O1=0;              // current angles 
-	double O2=-35.2;  
-	double O3=60.1;  
-	double O4=-90;  
+	double O2=00;//-35.2;  
+	double O3=0;//60.1;  
+	double O4=00;//-90;  
 	double O1_t=0;
-	double O2_t=90;
-	double O3_t=-35;
-	double O4_t=-90;
+	double O2_t=0;//90;
+	double O3_t=0;//-35;
+	double O4_t=0;//-90;
 	float x,y,z=0;                  // effector coordinates 
 	char state = sleeping;
 	int Step1_done,Step2_done,Step3_done,Step4_done = 0;
@@ -120,8 +120,8 @@ osThreadId Main_Arm_TaskHandle;
   int sens_4=1;
 	
 	int adc=0;
-  int x_Defected=0;                         
-	int y_Defected=0;
+  int x_Green=0;                         
+	int y_Green=0;
 	int i=-1; int nb=0;
 	char	PC_Data[6];
   char  cmd_Data[12];	
@@ -155,7 +155,8 @@ void Main_Arm_Task_function(void const * argument);
    #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f) 
 #endif 
 	 
-int check_Defected(void);	 
+int check_Defected(void);
+void Get_Defected(void);
 void Set_joint_angles(float xt,float yt,float zt);
 
 /* USER CODE END PFP */
@@ -240,7 +241,7 @@ int main(void)
 
   /* definition and creation of Main_Arm_Task */
   osThreadDef(Main_Arm_Task, Main_Arm_Task_function, osPriorityNormal, 0, 128);
-  Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
+  //Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -254,9 +255,9 @@ int main(void)
 /* Start scheduler */
 
  //Set_joint_angles(0,-200,-180);
-//O1_t=-45;
-//O2_t=-45;
-//O3_t=45;
+O1_t=-180;
+//O2_t=45;
+//O3_t=90;
 //O4_t=-90;
 
 osKernelStart();
@@ -514,26 +515,18 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O4_t=-90.00;
 	
 	Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
-}	
+ }	
 }
 		
 void Get_Defected(){
-	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON
-	  
-	  		
-		for(int j=0;j<60;j++){
+	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
+		for(int j=0;j<35;j++){
 		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);	
-		  //HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,0);
-		  /*HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);*/HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);
-      /*HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);*/HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0); osDelay(1);
+		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);
+      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0); osDelay(1);
 			  O2-=step2_resolution;    
-			  //O3-=step3_resolution;    
 		}
-		
-	
 }
-
-
 
 /* USER CODE END 4 */
 
@@ -544,8 +537,7 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1); // 500 us
-		//Set_joint_angles(200,0,-60);
+		osDelay(1); // 500 us
   }
   /* USER CODE END 5 */ 
 }
@@ -669,9 +661,9 @@ void Main_Arm_Task_function(void const * argument)
 		{
 			if(1){//check_Defected()){
 				state=extracting;
-				HAL_Delay(1000);
-				//Get_Defected();
-				//HAL_Delay(4000);
+				HAL_Delay(2000);
+				Get_Defected();
+				//HAL_Delay(1000);
 				Set_joint_angles(x_def_tank,y_def_tank,z_def_tank);			
 			}
 			else{
