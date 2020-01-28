@@ -103,13 +103,13 @@ osThreadId Main_Arm_TaskHandle;
 	const char extracting='c';
 	
 	double O1=0;              // current angles 
-	double O2=00;//-35.2;  
-	double O3=0;//60.1;  
-	double O4=00;//-90;  
+	double O2=-35.2;  
+	double O3=60.1;  
+	double O4=-90;  
 	double O1_t=0;
-	double O2_t=0;//90;
-	double O3_t=0;//-35;
-	double O4_t=0;//-90;
+	double O2_t=90;
+	double O3_t=-35;
+	double O4_t=-90;
 	float x,y,z=0;                  // effector coordinates 
 	char state = sleeping;
 	int Step1_done,Step2_done,Step3_done,Step4_done = 0;
@@ -129,7 +129,12 @@ osThreadId Main_Arm_TaskHandle;
 	char	y_tab[3]={0};
 	char	x_cmd[4]={0};     
 	char	y_cmd[4]={0};
- 	char	z_cmd[4]={0};   
+ 	char	z_cmd[4]={0}; 
+
+  int start_steps_1=100;   // to be deleted !!!!
+	int start_steps_2=60;
+	int start_steps_3=60;
+	int start_steps_4=60;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -158,7 +163,7 @@ void Main_Arm_Task_function(void const * argument);
 int check_Defected(void);
 void Get_Defected(void);
 void Set_joint_angles(float xt,float yt,float zt);
-
+void delay_micros(int us);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -241,7 +246,7 @@ int main(void)
 
   /* definition and creation of Main_Arm_Task */
   osThreadDef(Main_Arm_Task, Main_Arm_Task_function, osPriorityNormal, 0, 128);
-  //Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
+  Main_Arm_TaskHandle = osThreadCreate(osThread(Main_Arm_Task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -254,10 +259,9 @@ int main(void)
 
 /* Start scheduler */
 
- //Set_joint_angles(0,-200,-180);
-O1_t=-180;
+//O1_t=60;
 //O2_t=45;
-//O3_t=90;
+//O3_t=30;
 //O4_t=-90;
 
 osKernelStart();
@@ -272,7 +276,8 @@ osKernelStart();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	
+		
+		
   }
   /* USER CODE END 3 */
 
@@ -478,6 +483,12 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+void delay_micros(int us){   // To be  deleted !!!!!!!!!!!!!!
+for(int i=0;i<us;i++){
+	for(int k=0;k<26;k++){}
+ }
+}
+
 int sign(float n){
 	if(n>=0)
 		return 1;
@@ -513,8 +524,8 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O2_t=rad_to_deg(O2_t);
 	O3_t=rad_to_deg(O3_t);
 	O4_t=-90.00;
-	
-	Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
+start_steps_1=80;start_steps_2=40;start_steps_3=40;start_steps_4=40;	
+ Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
  }	
 }
 		
@@ -550,14 +561,13 @@ void Stepper1_Task_function(void const * argument)
   for(;;)
   {	 
 		if(fabs(O1_t-O1)>0.07){		
-		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(300); sens_1= 1; }
-		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(300);  sens_1= -1;}		
+		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(300); sens_1= 1;start_steps_1=80;}
+		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(300);  sens_1= -1;start_steps_1=80;}		
       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-			osDelay(1);   // equal to 500 micro-second !!!
+			osDelay(1); if(start_steps_1>0){delay_micros(500);start_steps_1--;}          // To be Deleted !     // equal to 590 micro-second !!!
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-			osDelay(1);
-			nb++;
+			osDelay(1); if(start_steps_1>0){delay_micros(500);start_steps_1--;} 
 	    O1+=(step1_resolution*sens_1);     		 
      }
 		else{
@@ -577,13 +587,13 @@ void Stepper2_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O2_t-O2)>0.07){		
-			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(300); sens_2= -1; }
-			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(300);  sens_2= 1;}	
+			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(300); sens_2= -1;start_steps_2=40;}
+			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(300);  sens_2= 1;start_steps_2=40;}	
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-			osDelay(1);   // equal to 580 micro-second !!!
+			osDelay(1);if(start_steps_2>0){delay_micros(500);start_steps_2--;}    // equal to 580 micro-second !!!
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-			osDelay(1);
+			osDelay(1);if(start_steps_2>0){delay_micros(500);start_steps_2--;} 
 	    O2+=(step2_resolution*sens_2);     		 
      }
 		else{
@@ -602,13 +612,13 @@ void Stepper3_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O3_t-O3)>0.07){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(300); sens_3= 1; }
-			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(300);  sens_3=-1;}		
+			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(300); sens_3= 1; start_steps_3=40;}
+			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(300);  sens_3=-1; start_steps_3=40;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
-			osDelay(1);   // equal to 500 micro-second !!!
+			osDelay(1);if(start_steps_3>0){delay_micros(500);start_steps_3--;}    // equal to 500 micro-second !!!
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
-			osDelay(1);
+			osDelay(1);if(start_steps_3>0){delay_micros(500);start_steps_3--;} 
 	    O3+=(step3_resolution*sens_3);     		 
      }
 		else{

@@ -114,7 +114,7 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-	     /*  HAL_UART_Receive_IT(&huart2,(uint8_t *)&cmd_Data,12); i++;        
+	       HAL_UART_Receive_IT(&huart2,(uint8_t *)&cmd_Data,12); i++;        
 	        if(i==12){
            x_cmd[0]=cmd_Data[0];x_cmd[1]=cmd_Data[1];x_cmd[2]=cmd_Data[2];x_cmd[3]=cmd_Data[3];			     
 	         y_cmd[0]=cmd_Data[4];y_cmd[1]=cmd_Data[5];y_cmd[2]=cmd_Data[6];y_cmd[3]=cmd_Data[7];			         
@@ -126,8 +126,8 @@ void USART2_IRQHandler(void)
 						if(y_test>89){y_test+=4;x_test+=8;}
 					 Set_joint_angles(x_test,y_test,z_test);				
 					 state=tracking;
-					  }*/
-					
+					  }
+					/*
 				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,6);  i++;
 						x_tab[0]=PC_Data[0];     
 						x_tab[1]=PC_Data[1];  
@@ -146,7 +146,7 @@ void USART2_IRQHandler(void)
 						state=tracking;			
 						}					
 						i=0;
-						}
+						}*/
   /* USER CODE END USART2_IRQn 1 */
 }
 
