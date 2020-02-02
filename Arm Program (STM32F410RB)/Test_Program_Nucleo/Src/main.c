@@ -95,7 +95,7 @@ osThreadId Main_Arm_TaskHandle;
 	
 	#define l2  		  162.00
 	#define l3   		  162.00
-	#define l4		    94.50
+	#define l4		    122.5 //94.50
 	
 	
 	const char sleeping='a';    // 1 step => 0.060944641 ° deg
@@ -131,7 +131,7 @@ osThreadId Main_Arm_TaskHandle;
 	char	y_cmd[4]={0};
  	char	z_cmd[4]={0}; 
 
-  int start_steps_1=100;   // to be deleted !!!!
+  int start_steps_1=180;   // to be deleted !!!!
 	int start_steps_2=60;
 	int start_steps_3=60;
 	int start_steps_4=60;
@@ -257,16 +257,10 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
  
 
-/* Start scheduler */
-
-//O1_t=60;
-//O2_t=45;
-//O3_t=30;
-//O4_t=-90;
-
-osKernelStart();
-
- /* We should never get here as control is now taken by the scheduler */
+  /* Start scheduler */
+  osKernelStart();
+  
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -456,12 +450,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LD2_Pin PA6 PA8 PA9 
-                           PA10 */
-  GPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_9 
-                          |GPIO_PIN_10;
+  /*Configure GPIO pins : LD2_Pin PA8 PA9 */
+  GPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PA6 PA10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -472,10 +471,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB10 PB3 PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+  /*Configure GPIO pins : PB10 PB4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB3 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -524,17 +530,17 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O2_t=rad_to_deg(O2_t);
 	O3_t=rad_to_deg(O3_t);
 	O4_t=-90.00;
-start_steps_1=80;start_steps_2=40;start_steps_3=40;start_steps_4=40;	
+start_steps_1=180;start_steps_2=60;start_steps_3=60;start_steps_4=60;	
  Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
  }	
 }
 		
 void Get_Defected(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
-		for(int j=0;j<35;j++){
+		for(int j=0;j<300;j++){
 		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);	
-		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);
-      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0); osDelay(1);
+		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);delay_micros(500);
+      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0); osDelay(1);delay_micros(500);
 			  O2-=step2_resolution;    
 		}
 }
@@ -544,6 +550,7 @@ void Get_Defected(){
 /* StartDefaultTask function */
 void StartDefaultTask(void const * argument)
 {
+
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
@@ -561,8 +568,8 @@ void Stepper1_Task_function(void const * argument)
   for(;;)
   {	 
 		if(fabs(O1_t-O1)>0.07){		
-		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(300); sens_1= 1;start_steps_1=80;}
-		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(300);  sens_1= -1;start_steps_1=80;}		
+		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(300); sens_1= 1;start_steps_1=180;}
+		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(300);  sens_1= -1;start_steps_1=180;}		
       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
 			osDelay(1); if(start_steps_1>0){delay_micros(500);start_steps_1--;}          // To be Deleted !     // equal to 590 micro-second !!!
@@ -587,8 +594,8 @@ void Stepper2_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O2_t-O2)>0.07){		
-			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(300); sens_2= -1;start_steps_2=40;}
-			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(300);  sens_2= 1;start_steps_2=40;}	
+			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(300); sens_2= -1;start_steps_2=60;}
+			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(300);  sens_2= 1;start_steps_2=60;}	
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
 			osDelay(1);if(start_steps_2>0){delay_micros(500);start_steps_2--;}    // equal to 580 micro-second !!!
@@ -612,8 +619,8 @@ void Stepper3_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O3_t-O3)>0.07){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(300); sens_3= 1; start_steps_3=40;}
-			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(300);  sens_3=-1; start_steps_3=40;}		
+			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(300); sens_3= 1; start_steps_3=60;}
+			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(300);  sens_3=-1; start_steps_3=60;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
 			osDelay(1);if(start_steps_3>0){delay_micros(500);start_steps_3--;}    // equal to 500 micro-second !!!
@@ -689,8 +696,8 @@ void Main_Arm_Task_function(void const * argument)
 		}
 		
   }
-  /* USER CODE END Main_Arm_Task_function */  //0270 -90-146
-}                                             //02400150-146
+  /* USER CODE END Main_Arm_Task_function */
+}
 
 /**
   * @brief  Period elapsed callback in non blocking mode
