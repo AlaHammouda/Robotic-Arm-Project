@@ -97,8 +97,8 @@ osThreadId Main_Arm_TaskHandle;
 	#define l3   		  162.00
 	#define l4		    122.5 //94.50
 	
-  #define First_steps_1  		  260.00
-	#define First_steps_2   		70.00
+  #define First_steps_1  		  250.00
+	#define First_steps_2   		80.00
 	#define First_steps_3		    30.00 
 	
 	
@@ -540,15 +540,18 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O2_t=rad_to_deg(O2_t);
 	O3_t=rad_to_deg(O3_t);
 	O4_t=-90.00;
-start_steps_1=First_steps_1;start_steps_2=First_steps_2;start_steps_3=First_steps_3;start_steps_4=60;	
- Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
+
+if(state!=tracking){start_steps_1=First_steps_1;start_steps_2=First_steps_2;
+   start_steps_3=First_steps_3;start_steps_4=60;	}
+
+		Step1_done=0; Step2_done=0; Step3_done=0; Step4_done=0; 
  }	
 }
 		
 void Get_Defected(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
-	Set_joint_angles(x_test,y_test,z_test-40);
-	HAL_Delay(700);
+	Set_joint_angles(x_Green,y_Green,-190);  
+	HAL_Delay(800);
 	/*for(int j=0;j<300;j++){
 		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);	
 		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);delay_micros(500);
@@ -686,25 +689,25 @@ void Main_Arm_Task_function(void const * argument)
 		y=(l2*cos(O2*PI/180)+l3*cos(O3*PI/180))*sin(O1*PI/180);
 		z=l2*sin(O2*PI/180)+l3*sin(O3*PI/180)-l4;
 		*/
-		if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking )
-		{
-			if(1){//check_Defected()){
+		//if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking )
+		//{
+	   if(/*Step1_done && Step2_done && Step3_done && Step4_done &&*/ check_Defected() && state==tracking ){
 				state=extracting;
-				HAL_Delay(1000);
+				//HAL_Delay(1000);
 			  Get_Defected();
 		  	Set_joint_angles(x_def_tank,y_def_tank,z_def_tank);			
 			}
-			else{
-				Set_joint_angles(x_init,y_init,z_init); state=sleeping;			
+			if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking && !check_Defected()){
+				 state=sleeping;	  Set_joint_angles(x_init,y_init,z_init); 		
 			}
-		}
-		
+			
 		if(Step1_done && Step2_done && Step3_done && Step4_done && state==extracting )
 		{		
 			HAL_Delay(1000);
 			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
 			HAL_Delay(500);
-			Set_joint_angles(x_init,y_init,z_init); state=sleeping;	
+			state=sleeping;
+			Set_joint_angles(x_init,y_init,z_init); 	
 		}
 		
   }
