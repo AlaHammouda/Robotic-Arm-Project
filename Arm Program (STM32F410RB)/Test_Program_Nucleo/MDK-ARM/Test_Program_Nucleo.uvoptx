@@ -153,102 +153,62 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\Test_Program_Nucleo\../Src/main.c\O1_t</ItemText>
+          <ItemText>x</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\Test_Program_Nucleo\../Src/main.c\O2_t</ItemText>
+          <ItemText>y</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\Test_Program_Nucleo\../Src/main.c\O3_t</ItemText>
+          <ItemText>z</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\Test_Program_Nucleo\../Src/main.c\O4_t</ItemText>
+          <ItemText>nb,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>O1</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>O2</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>O3</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>O4</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>x</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>y</ItemText>
-        </Ww>
-        <Ww>
-          <count>10</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>z</ItemText>
-        </Ww>
-        <Ww>
-          <count>11</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>nb,0x0A</ItemText>
+          <ItemText>state,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>x_test</ItemText>
+          <ItemText>y_tab,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>2</WinNumber>
-          <ItemText>\\Test_Program_Nucleo\../Src/stm32f4xx_it.c\z_test</ItemText>
+          <ItemText>x_tab,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>\\Test_Program_Nucleo\../Src/stm32f4xx_it.c\y_test</ItemText>
+          <ItemText>color,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>2</WinNumber>
-          <ItemText>y_tab,0x0A</ItemText>
+          <ItemText>x_target,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>2</WinNumber>
-          <ItemText>x_tab,0x0A</ItemText>
+          <ItemText>y_target,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>2</WinNumber>
-          <ItemText>y_Green,0x0A</ItemText>
+          <ItemText>PC_Data</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>x_Green,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
           <WinNumber>2</WinNumber>
           <ItemText>i,0x0A</ItemText>
         </Ww>

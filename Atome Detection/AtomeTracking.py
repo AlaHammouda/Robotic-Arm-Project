@@ -9,10 +9,14 @@ import serial
 
 ser = serial.Serial('COM12',baudrate=9600, timeout=1)
 
-# define the lower and upper boundaries of the "green"
-# ball in the HSV color space, then initialize the
-greenLower = (37,44,134)   #def green (25,44,134)    red (0, 50, 20)  blue  (83, 0, 255)
-greenUpper = (72, 255, 255) #def green (72, 255, 255) red (7, 255, 255)  blue  (109, 255, 255)
+greenLower = (37,44,100)  
+greenUpper = (72, 255, 255)
+redLower   = (0, 50, 145)
+redUpper   = (7, 255, 255)
+blueLower  = (95, 0, 100)
+blueUpper  = (111, 255, 255)
+yellowLower= (11, 55, 255)
+yellowUpper= (21, 55, 255)
 
 vs = VideoStream(src=1).start()
 time.sleep(2.0)
@@ -28,45 +32,78 @@ while True:
 	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
 	hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
-	# construct a mask for the color "green", then perform
-	# a series of dilations and erosions to remove any small
-	# blobs left in the mask
-	mask = cv2.inRange(hsv, greenLower, greenUpper)
-	mask = cv2.erode(mask, None, iterations=2)
-	mask = cv2.dilate(mask, None, iterations=2)
-    
-       # find contours in the mask and initialize the current
-	# (x, y) center of the ball
-	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-	cnts = imutils.grab_contours(cnts)
-	# only proceed if at least one contour was found
-	time.sleep(0.02)
-	if len(cnts) > 0:
-		# find the largest contour in the mask, then use
-		# it to compute the minimum enclosing circle and
-		# centroid
-		c = max(cnts, key=cv2.contourArea)
+	mask_g = cv2.inRange(hsv, greenLower, greenUpper)
+	mask_g = cv2.erode(mask_g, None, iterations=2)
+	mask_g = cv2.dilate(mask_g, None, iterations=2)
+	cnts_g = cv2.findContours(mask_g.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	cnts_g = imutils.grab_contours(cnts_g)
+
+	mask_r = cv2.inRange(hsv, redLower, redUpper)
+	mask_r = cv2.erode(mask_r, None, iterations=2)
+	mask_r = cv2.dilate(mask_r, None, iterations=2)
+	cnts_r = cv2.findContours(mask_r.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	cnts_r = imutils.grab_contours(cnts_r)
+
+	mask_b = cv2.inRange(hsv, blueLower, blueUpper)
+	mask_b = cv2.erode(mask_b, None, iterations=2)
+	mask_b = cv2.dilate(mask_b, None, iterations=2)
+	cnts_b = cv2.findContours(mask_b.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	cnts_b = imutils.grab_contours(cnts_b)
+
+	mask_y = cv2.inRange(hsv, yellowLower, yellowUpper)
+	mask_y = cv2.erode(mask_y, None, iterations=2)
+	mask_y = cv2.dilate(mask_y, None, iterations=2)
+	cnts_y = cv2.findContours(mask_y.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	cnts_y = imutils.grab_contours(cnts_y)
+
+	
+	if len(cnts_g) > 0:
+		c = max(cnts_g, key=cv2.contourArea)
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-
-		# only proceed if the radius meets a minimum size
-		if radius > 70:
-			# draw the circle and centroid on the frame,
+		if radius > 70 and radius < 90:
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 0), 2)
-			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3))
-			print(center)
-			print(radius)
+			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'g')
 			ser.write(str.encode(STM_Data))
-		# loop over the set of tracked points
-	
-	# show the frame to our screen
+			
+	elif len(cnts_r) > 0:
+		c = max(cnts_r, key=cv2.contourArea)
+		((x, y), radius) = cv2.minEnclosingCircle(c)
+		M = cv2.moments(c)
+		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+		if radius > 70 and radius < 90:
+			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 0, 255), 2)
+			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'r')
+			ser.write(str.encode(STM_Data))
+			
+	elif len(cnts_b) > 0:
+		c = max(cnts_b, key=cv2.contourArea)
+		((x, y), radius) = cv2.minEnclosingCircle(c)
+		M = cv2.moments(c)
+		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+		if radius > 70 and radius < 90:
+			cv2.circle(frame, (int(x), int(y)), int(radius),(255, 0, 0), 2)
+			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'b')
+			ser.write(str.encode(STM_Data)) 
+
+	elif len(cnts_y) > 0:
+		c = max(cnts_y, key=cv2.contourArea)
+		((x, y), radius) = cv2.minEnclosingCircle(c)
+		M = cv2.moments(c)
+		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+		if radius > 70 and radius < 90:
+			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 125, 125), 2)
+			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'y')
+			ser.write(str.encode(STM_Data)) 	
+
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
  
-	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
 		break
+	
+	time.sleep(0.2)
  
 vs.release()
 cv2.destroyAllWindows()

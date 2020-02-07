@@ -3,7 +3,7 @@
 <title>Static Call Graph - [Test_Program_Nucleo\Test_Program_Nucleo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Test_Program_Nucleo\Test_Program_Nucleo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Feb 04 18:03:43 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Feb 06 16:02:24 2020
 <BR><P>
 <H3>Maximum Stack Usage =        320 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -612,7 +612,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_strtoul
 </UL>
 
-<P><STRONG><a name="[66]"></a>Get_Defected</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, main.o(i.Get_Defected))
+<P><STRONG><a name="[ea]"></a>__decompress</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __dczerorl2.o(.text), UNUSED)
+
+<P><STRONG><a name="[eb]"></a>__decompress1</STRONG> (Thumb, 86 bytes, Stack size unknown bytes, __dczerorl2.o(.text), UNUSED)
+
+<P><STRONG><a name="[66]"></a>Get_Defected</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, main.o(i.Get_Defected))
 <BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = Get_Defected &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -934,7 +938,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 </UL>
 
-<P><STRONG><a name="[4a]"></a>Main_Arm_Task_function</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, main.o(i.Main_Arm_Task_function))
+<P><STRONG><a name="[4a]"></a>Main_Arm_Task_function</STRONG> (Thumb, 240 bytes, Stack size 16 bytes, main.o(i.Main_Arm_Task_function))
 <BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = Main_Arm_Task_function &rArr; Get_Defected &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -946,7 +950,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[68]"></a>Set_joint_angles</STRONG> (Thumb, 632 bytes, Stack size 56 bytes, main.o(i.Set_joint_angles))
+<P><STRONG><a name="[68]"></a>Set_joint_angles</STRONG> (Thumb, 630 bytes, Stack size 56 bytes, main.o(i.Set_joint_angles))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
@@ -979,7 +983,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[46]"></a>Stepper1_Task_function</STRONG> (Thumb, 282 bytes, Stack size 8 bytes, main.o(i.Stepper1_Task_function))
+<P><STRONG><a name="[46]"></a>Stepper1_Task_function</STRONG> (Thumb, 286 bytes, Stack size 8 bytes, main.o(i.Stepper1_Task_function))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Stepper1_Task_function &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -996,7 +1000,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[47]"></a>Stepper2_Task_function</STRONG> (Thumb, 284 bytes, Stack size 8 bytes, main.o(i.Stepper2_Task_function))
+<P><STRONG><a name="[47]"></a>Stepper2_Task_function</STRONG> (Thumb, 288 bytes, Stack size 8 bytes, main.o(i.Stepper2_Task_function))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Stepper2_Task_function &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -1013,7 +1017,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[48]"></a>Stepper3_Task_function</STRONG> (Thumb, 282 bytes, Stack size 8 bytes, main.o(i.Stepper3_Task_function))
+<P><STRONG><a name="[48]"></a>Stepper3_Task_function</STRONG> (Thumb, 286 bytes, Stack size 8 bytes, main.o(i.Stepper3_Task_function))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Stepper3_Task_function &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -1089,7 +1093,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 </UL>
 
-<P><STRONG><a name="[2a]"></a>USART2_IRQHandler</STRONG> (Thumb, 244 bytes, Stack size 24 bytes, stm32f4xx_it.o(i.USART2_IRQHandler))
+<P><STRONG><a name="[2a]"></a>USART2_IRQHandler</STRONG> (Thumb, 218 bytes, Stack size 24 bytes, stm32f4xx_it.o(i.USART2_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = USART2_IRQHandler &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
@@ -1117,7 +1121,7 @@ Global Symbols
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 </UL>
 
-<P><STRONG><a name="[ea]"></a>__rt_errno_addr</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, errno.o(i.__aeabi_errno_addr), UNUSED)
+<P><STRONG><a name="[ec]"></a>__rt_errno_addr</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, errno.o(i.__aeabi_errno_addr), UNUSED)
 
 <P><STRONG><a name="[9c]"></a>__hardfp_acos</STRONG> (Thumb, 738 bytes, Stack size 72 bytes, acos.o(i.__hardfp_acos))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = __hardfp_acos &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
@@ -1265,11 +1269,11 @@ Global Symbols
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_atan
 </UL>
 
-<P><STRONG><a name="[eb]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[ed]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[ec]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[ee]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[ed]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[ef]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[ab]"></a>__set_errno</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, errno.o(i.__set_errno))
 <BR><BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sqrt
