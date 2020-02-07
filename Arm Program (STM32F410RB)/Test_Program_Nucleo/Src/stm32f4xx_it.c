@@ -130,7 +130,7 @@ void USART2_IRQHandler(void)
 					 state=tracking;
 					  }*/
 					
-				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,7);  //i++;
+				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,7);  i++;
 					
    					x_tab[0]=PC_Data[0];     
 						x_tab[1]=PC_Data[1];  
@@ -139,10 +139,9 @@ void USART2_IRQHandler(void)
 						y_tab[1]=PC_Data[4];   
 						y_tab[2]=PC_Data[5];
             color=PC_Data[6];						
-						//if(i==7){
-							//i=0;
+						if(i==7){		
 						if(state==sleeping){
-						y_target=atoi(y_tab);y_tab[0]=' ';y_tab[1]=' ';y_tab[2]=' ';	
+						y_target=atoi(y_tab)/1000000;y_tab[0]=' ';y_tab[1]=' ';y_tab[2]=' ';	
 						x_target=atoi(x_tab);
 						y_target=0.4972*y_target-155.623;
 						x_target=-0.506*x_target+327.53;
@@ -151,7 +150,8 @@ void USART2_IRQHandler(void)
 						Set_joint_angles(x_target,y_target,-147);  
 						state=tracking;				
 			      }
-				  //}
+					i=0;
+				}
   /* USER CODE END USART2_IRQn 1 */
   }
 

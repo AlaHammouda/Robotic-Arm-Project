@@ -3,11 +3,11 @@
 <title>Static Call Graph - [Test_Program_Nucleo\Test_Program_Nucleo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Test_Program_Nucleo\Test_Program_Nucleo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Feb 06 16:02:24 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Feb 07 15:08:32 2020
 <BR><P>
-<H3>Maximum Stack Usage =        320 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        328 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-Main_Arm_Task_function &rArr; Get_Defected &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
+USART2_IRQHandler &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 <P>
 <H3>
 Mutually Recursive functions
@@ -1017,7 +1017,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[48]"></a>Stepper3_Task_function</STRONG> (Thumb, 286 bytes, Stack size 8 bytes, main.o(i.Stepper3_Task_function))
+<P><STRONG><a name="[48]"></a>Stepper3_Task_function</STRONG> (Thumb, 282 bytes, Stack size 8 bytes, main.o(i.Stepper3_Task_function))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Stepper3_Task_function &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -1093,8 +1093,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 </UL>
 
-<P><STRONG><a name="[2a]"></a>USART2_IRQHandler</STRONG> (Thumb, 218 bytes, Stack size 24 bytes, stm32f4xx_it.o(i.USART2_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = USART2_IRQHandler &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[2a]"></a>USART2_IRQHandler</STRONG> (Thumb, 246 bytes, Stack size 32 bytes, stm32f4xx_it.o(i.USART2_IRQHandler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = USART2_IRQHandler &rArr; Set_joint_angles &rArr; __hardfp_cos &rArr; __ieee754_rem_pio2 &rArr; __aeabi_dsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT

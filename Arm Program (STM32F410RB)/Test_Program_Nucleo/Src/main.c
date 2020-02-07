@@ -152,10 +152,10 @@ osThreadId Main_Arm_TaskHandle;
 	int start_steps_4=60;
 	
 	char color ='g';
-	Color_Area  Green_Area={150,180,-130};
-  Color_Area  Red_Area={240,180,-130};
-  Color_Area  Blue_Area={150,-180,-130};
-  Color_Area  Yellow_Area={240,-180,-130};
+	Color_Area  Green_Area={150,195,-130};
+  Color_Area  Red_Area={240,195,-130};
+  Color_Area  Blue_Area={150,-210,-130};
+  Color_Area  Yellow_Area={240,-210,-130};
 
 	
 
@@ -567,9 +567,9 @@ if(state!=tracking){start_steps_1=First_steps_1;start_steps_2=First_steps_2;
 void Get_Defected(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
 	Set_joint_angles(x_target,y_target,-190);  
-	HAL_Delay(800);
+	HAL_Delay(700);
 	Set_joint_angles(x_target+5,y_target,-90);  
-	HAL_Delay(750);  
+	HAL_Delay(1000);  
 	/*for(int j=0;j<300;j++){
 		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);	
 		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);delay_micros(500);
@@ -627,8 +627,8 @@ void Stepper2_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O2_t-O2)>0.07){		
-			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(300); sens_2= -1;start_steps_2=First_steps_2;}
-			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(300);  sens_2= 1;start_steps_2=First_steps_2;}	
+			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(400); sens_2= -1;start_steps_2=First_steps_2;}
+			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(400);  sens_2= 1;start_steps_2=First_steps_2;}	
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
 			osDelay(1);if(start_steps_2>0){delay_micros(500);start_steps_2--;}    // equal to 580 micro-second !!!
@@ -652,8 +652,8 @@ void Stepper3_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O3_t-O3)>0.07){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(300); sens_3= 1; start_steps_3=First_steps_3;}
-			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(300);  sens_3=-1; start_steps_3=First_steps_3;}		
+			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(60); sens_3= 1; start_steps_3=First_steps_3;}
+			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(60);  sens_3=-1; start_steps_3=First_steps_3;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
 			osDelay(1);if(start_steps_3>0){delay_micros(500);start_steps_3--;}    // equal to 500 micro-second !!!
@@ -712,7 +712,7 @@ void Main_Arm_Task_function(void const * argument)
 		//{
 	   if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking ){
 				
-			 if(check_Defected()){
+			 if(check_Defected()){ 
 			  state=sorting;
 				HAL_Delay(100);
 			  Get_Defected();
@@ -733,7 +733,7 @@ void Main_Arm_Task_function(void const * argument)
 		if(Step1_done && Step2_done && Step3_done && Step4_done && state==sorting )
 		{		
 			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
-			HAL_Delay(1500);
+			HAL_Delay(2000);
 			Set_joint_angles(x_init,y_init,z_init); 	
 			state=sleeping;
 		}
