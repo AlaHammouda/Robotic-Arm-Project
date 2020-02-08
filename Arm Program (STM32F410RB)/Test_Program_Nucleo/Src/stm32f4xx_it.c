@@ -137,17 +137,17 @@ void USART2_IRQHandler(void)
 						x_tab[2]=PC_Data[2];    
 						y_tab[0]=PC_Data[3];     
 						y_tab[1]=PC_Data[4];   
-						y_tab[2]=PC_Data[5];
-            color=PC_Data[6];						
+						y_tab[2]=PC_Data[5];					
 						if(i==7){		
 						if(state==sleeping){
+						color=PC_Data[6];		
 						y_target=atoi(y_tab)/1000000;y_tab[0]=' ';y_tab[1]=' ';y_tab[2]=' ';	
 						x_target=atoi(x_tab);
 						y_target=0.4972*y_target-155.623;
 						x_target=-0.506*x_target+327.53;
 						x_target+=7;
 						if(y_target>89){y_target+=4;}					
-						Set_joint_angles(x_target,y_target,-147);  
+						Set_joint_angles(x_target,y_target,-150);  
 						state=tracking;				
 			      }
 					i=0;

@@ -96,8 +96,8 @@ osThreadId Main_Arm_TaskHandle;
 	#define l4		    122.5 //94.50
 	
   #define First_steps_1  		  250.00
-	#define First_steps_2   		80.00
-	#define First_steps_3		    80.00 
+	#define First_steps_2   		100.00
+	#define First_steps_3		    30.00 
 	
 	
 		typedef struct{
@@ -122,7 +122,7 @@ osThreadId Main_Arm_TaskHandle;
 	double O1_t=0;
 	double O2_t=90;
 	double O3_t=-35;
-	double O4_t=-90;
+	double O4_t=-90;      
 	float x,y,z=0;                  // effector coordinates 
 	char state = sleeping;
 	int Step1_done,Step2_done,Step3_done,Step4_done = 0;
@@ -171,7 +171,6 @@ void StartDefaultTask(void const * argument);
 void Stepper1_Task_function(void const * argument);
 void Stepper2_Task_function(void const * argument);
 void Stepper3_Task_function(void const * argument);
-void Stepper4_Task_function(void const * argument);
 void Main_Arm_Task_function(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -264,9 +263,6 @@ int main(void)
   osThreadDef(Stepper3_Task, Stepper3_Task_function, osPriorityIdle, 0, 128);
   Stepper3_TaskHandle = osThreadCreate(osThread(Stepper3_Task), NULL);
 
-  /* definition and creation of Stepper4_Task */
-  osThreadDef(Stepper4_Task, Stepper4_Task_function, osPriorityIdle, 0, 128);
-  Stepper4_TaskHandle = osThreadCreate(osThread(Stepper4_Task), NULL);
 
   /* definition and creation of Main_Arm_Task */
   osThreadDef(Main_Arm_Task, Main_Arm_Task_function, osPriorityNormal, 0, 128);
@@ -283,6 +279,8 @@ int main(void)
 	//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);
 	//HAL_Delay(20000);
 	//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);
+	//O3_t=10;
+	//O2_t=10;
   /* Start scheduler */
  osKernelStart();
   
@@ -568,8 +566,8 @@ void Get_Defected(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
 	Set_joint_angles(x_target,y_target,-190);  
 	HAL_Delay(700);
-	Set_joint_angles(x_target+5,y_target,-90);  
-	HAL_Delay(1000);  
+	Set_joint_angles(x_target,y_target,-100);  
+	HAL_Delay(700);       
 	/*for(int j=0;j<300;j++){
 		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);	
 		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);delay_micros(500);
@@ -669,31 +667,6 @@ void Stepper3_Task_function(void const * argument)
   /* USER CODE END Stepper3_Task_function */
 }
 
-/* Stepper4_Task_function function */
-void Stepper4_Task_function(void const * argument)
-{
-  /* USER CODE BEGIN Stepper4_Task_function */
-  /* Infinite loop */
-  for(;;)
-  {
-    	if(fabs(O4_t-O4)>0.07){		
-			if((O4<O4_t)&&(sens_4==-1)){HAL_Delay(60); sens_4= 1; }
-			if((O4>O4_t)&&(sens_4==1)){ HAL_Delay(60);  sens_4= -1;}	
-      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,sens_4-1);			
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,1);
-			osDelay(1);   // equal to 500 micro-second !!!
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3,0);
-			osDelay(1);
-	    O4+=(step4_resolution*sens_4);     		 
-     }
-		else{
-			Step4_done=1;
-		  osDelay(1);
-		 }
-  }
-  /* USER CODE END Stepper4_Task_function */
-}
-
 /* Main_Arm_Task_function function */
 void Main_Arm_Task_function(void const * argument)
 {
@@ -714,7 +687,6 @@ void Main_Arm_Task_function(void const * argument)
 				
 			 if(check_Defected()){ 
 			  state=sorting;
-				HAL_Delay(100);
 			  Get_Defected();
 				 switch (color){
 					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z);Green_Area.z+=30;break;
