@@ -147,7 +147,7 @@ void USART2_IRQHandler(void)
 						x_target=-0.506*x_target+327.53;
 						x_target+=7;
 						if(y_target>89){y_target+=4;}					
-						Set_joint_angles(x_target,y_target,-150);  
+						Set_joint_angles(x_target,y_target,-146);  
 						state=tracking;				
 			      }
 					i=0;
