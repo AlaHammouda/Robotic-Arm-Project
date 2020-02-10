@@ -95,12 +95,8 @@ osThreadId Main_Arm_TaskHandle;
 	#define l3   		  162.00
 	#define l4		    122.5 //94.50
 	
-  #define First_steps_1  		  250.00
-	#define First_steps_2   		100.00
-	#define First_steps_3		    30.00 
-	
-	
-		typedef struct{
+
+typedef struct{
 	int x;
 	int y;
 	int z;
@@ -135,7 +131,8 @@ osThreadId Main_Arm_TaskHandle;
 	int adc=0;
   int x_target=0;                         
 	int y_target=0;
-
+ 
+  int Delayed=0;
 	
 	int i=-1; int nb=0;
 	char	PC_Data[7];
@@ -145,11 +142,6 @@ osThreadId Main_Arm_TaskHandle;
 	char	x_cmd[4]={0};     
 	char	y_cmd[4]={0};
  	char	z_cmd[4]={0}; 
-
-  int start_steps_1=First_steps_1;   // to be deleted !!!!
-	int start_steps_2=First_steps_2;
-	int start_steps_3=First_steps_3;
-	int start_steps_4=60;
 	
 	char color ='g';
 	Color_Area  Green_Area={150,195,-130};
@@ -189,6 +181,7 @@ void Main_Arm_Task_function(void const * argument);
 	 
 int check_Defected(void);
 void Get_Defected(void);
+int Steppers_Ready(void);
 void Set_joint_angles(float xt,float yt,float zt);
 void delay_micros(int us);
 /* USER CODE END PFP */
@@ -298,7 +291,6 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		
 		
   }
   /* USER CODE END 3 */
@@ -534,10 +526,15 @@ float rad_to_deg(double x){
 				return(x*360/(2*PI));
 			}
 
+
 int check_Defected(){	
-			HAL_ADC_Start(&hadc1);
-		  adc=HAL_ADC_GetValue(&hadc1);	
-      return (adc<100);	
+	   adc=0;
+     for(int k=0;k<50;k++){		
+    	HAL_ADC_Start(&hadc1);
+		  adc+=HAL_ADC_GetValue(&hadc1);	
+		  }
+		 adc/=50;
+		  return (adc<100);
 		}
 
 void  Set_joint_angles(float xt,float yt , float zt){		
@@ -559,28 +556,23 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O3_t=rad_to_deg(O3_t);
 	O4_t=-90.00;
 
-/*if(state!=tracking){*/start_steps_1=First_steps_1;start_steps_2=First_steps_2;
-   start_steps_3=First_steps_3;start_steps_4=60;	//}
-
 		Step1_done=0; Step2_done=0; Step3_done=0; 
  }	
 }
-		
+
+int Steppers_Ready(){
+	return(Step1_done && Step2_done && Step3_done); 
+}
+
 void Get_Defected(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
-	Set_joint_angles(x_target,y_target,-180);  
-	HAL_Delay(600);
+	Set_joint_angles(x_target,y_target,-175);  
+	while(!Steppers_Ready());
 	if(((Green_Stored>=2)&&(color=='g'))||((Red_Stored>=2)&&(color=='r'))||((Blue_Stored>=2)&&(color=='b'))||((Yellow_Stored>=2)&&(color=='y')))
-	{Set_joint_angles(x_target,y_target,-60); HAL_Delay(850);}
+	{Set_joint_angles(x_target,y_target,-60); while(!Steppers_Ready());}
 	else
-	{Set_joint_angles(x_target,y_target,-95);	HAL_Delay(650);} 	
+	{Set_joint_angles(x_target,y_target,-95);	while(!Steppers_Ready());} 	
        
-	/*for(int j=0;j<300;j++){
-		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,1);	
-		  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); osDelay(1);delay_micros(500);
-      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0); osDelay(1);delay_micros(500);
-			  O2-=step2_resolution;    
-		}*/
 }
 
 /* USER CODE END 4 */
@@ -606,13 +598,13 @@ void Stepper1_Task_function(void const * argument)
   for(;;)
   {	
 		if(fabs(O1_t-O1)>0.07){		
-		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(150); sens_1= 1;start_steps_1=First_steps_1;}
-		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(150);  sens_1= -1;start_steps_1=First_steps_1;}		
+		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(90); sens_1= 1;}
+		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(90);  sens_1= -1;}		
       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-			osDelay(1); if(start_steps_1>0){delay_micros(500);start_steps_1--;}          // To be Deleted !     // equal to 590 micro-second !!!
+			osDelay(1);         // To be Deleted !     // equal to 590 micro-second !!!
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-			osDelay(1); if(start_steps_1>0){delay_micros(500);start_steps_1--;} 
+			osDelay(1);
 	    O1+=(step1_resolution*sens_1);     		 
      }
 		else{
@@ -632,13 +624,14 @@ void Stepper2_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O2_t-O2)>0.07){		
-			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(100); sens_2= -1;start_steps_2=First_steps_2;}
-			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(100);  sens_2= 1;start_steps_2=First_steps_2;}	
+			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(150); sens_2= -1;}
+			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(150);  sens_2= 1;}	
+		  if(Delayed){HAL_Delay(200);Delayed=0;}                 //to be deleted 
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-			osDelay(1);if(start_steps_2>0){delay_micros(500);start_steps_2--;}    // equal to 580 micro-second !!!
+			osDelay(1);    // equal to 580 micro-second !!!
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-			osDelay(1);if(start_steps_2>0){delay_micros(500);start_steps_2--;} 
+			osDelay(1);
 	    O2+=(step2_resolution*sens_2);     		 
      }
 		else{
@@ -657,13 +650,14 @@ void Stepper3_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O3_t-O3)>0.07){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(100); sens_3= 1; start_steps_3=First_steps_3;}
-			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(100);  sens_3=-1; start_steps_3=First_steps_3;}		
+			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(150); sens_3= 1;}
+			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(150);  sens_3=-1;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
-			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
-			osDelay(1);if(start_steps_3>0){delay_micros(500);start_steps_3--;}    // equal to 500 micro-second !!!
+			if(Delayed){HAL_Delay(200);}                 //to be deleted 
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
+			osDelay(1);   // equal to 500 micro-second !!!
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
-			osDelay(1);if(start_steps_3>0){delay_micros(500);start_steps_3--;} 
+			osDelay(1);
 	    O3+=(step3_resolution*sens_3);     		 
      }
 		else{
@@ -688,11 +682,9 @@ void Main_Arm_Task_function(void const * argument)
 		y=(l2*cos(O2*PI/180)+l3*cos(O3*PI/180))*sin(O1*PI/180);
 		z=l2*sin(O2*PI/180)+l3*sin(O3*PI/180)-l4;
 		*/
-		//if(Step1_done && Step2_done && Step3_done && Step4_done && state==tracking )
-		//{
-	   if(Step1_done && Step2_done && Step3_done && state==tracking ){
-				
-			 if(check_Defected()){ 
+
+	   if(Steppers_Ready() && state==tracking ){		
+			 if(check_Defected()){
 			  state=sorting;
 			  Get_Defected();
 				 switch (color){
@@ -709,10 +701,11 @@ void Main_Arm_Task_function(void const * argument)
 			}
 		}
 			
-		if(Step1_done && Step2_done && Step3_done && state==sorting )
+		if(Steppers_Ready() && state==sorting )
 		{		
 			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
-			HAL_Delay(2400);
+			while(check_Defected()); 
+		  Delayed=1;                           // to be deleted 
 			Set_joint_angles(x_init,y_init,z_init); 	
 			state=sleeping;
 		}
