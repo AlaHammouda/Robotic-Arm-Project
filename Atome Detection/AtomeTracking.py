@@ -15,8 +15,8 @@ redLower   = (0, 50, 145)
 redUpper   = (7, 255, 255)
 blueLower  = (95, 0, 100)
 blueUpper  = (111, 255, 255)
-yellowLower= (11, 55, 255)
-yellowUpper= (21, 55, 255)
+yellowLower= (21, 58, 146)
+yellowUpper= (35, 255, 255)
 
 vs = VideoStream(src=1).start()
 time.sleep(2.0)
@@ -93,7 +93,7 @@ while True:
 		M = cv2.moments(c)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 		if radius > 70 and radius < 90:
-			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 125, 125), 2)
+			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
 			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'y')
 			ser.write(str.encode(STM_Data)) 	
 
@@ -103,7 +103,7 @@ while True:
 	if key == ord("q"):
 		break
 	
-	time.sleep(0.2)
+	time.sleep(0.15)
  
 vs.release()
 cv2.destroyAllWindows()
