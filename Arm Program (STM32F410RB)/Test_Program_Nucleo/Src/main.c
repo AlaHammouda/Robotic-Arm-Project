@@ -624,9 +624,9 @@ void Stepper2_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O2_t-O2)>0.07){		
-			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(150); sens_2= -1;}
-			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(150);  sens_2= 1;}	
-		  if(Delayed){HAL_Delay(200);Delayed=0;}                 //to be deleted 
+			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(100); sens_2= -1;}
+			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(100);  sens_2= 1;}	
+		  if(Delayed){HAL_Delay(280);Delayed=0;}                 //to be deleted 
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
 			osDelay(1);    // equal to 580 micro-second !!!
@@ -650,10 +650,10 @@ void Stepper3_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O3_t-O3)>0.07){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(150); sens_3= 1;}
-			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(150);  sens_3=-1;}		
+			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(100); sens_3= 1;}
+			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(100);  sens_3=-1;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
-			if(Delayed){HAL_Delay(200);}                 //to be deleted 
+			if(Delayed){HAL_Delay(280);}                 //to be deleted 
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
@@ -693,8 +693,7 @@ void Main_Arm_Task_function(void const * argument)
 					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);Blue_Area.z+=30;Blue_Stored++;break;
 					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Area.z+=30;Yellow_Stored++;break;
            default : break;
-				 }
-        			 
+				 }     			 
 			}
 			else{
 				 state=sleeping;  Set_joint_angles(x_init,y_init,z_init); 		
