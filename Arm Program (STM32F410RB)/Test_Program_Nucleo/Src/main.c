@@ -146,8 +146,8 @@ typedef struct{
 	char color ='g';
 	Color_Area  Green_Area={150,195,-130};
   Color_Area  Red_Area={240,195,-130};
-  Color_Area  Blue_Area={150,-210,-130};
-  Color_Area  Yellow_Area={240,-210,-130};
+  Color_Area  Blue_Area={150,-195,-130};
+  Color_Area  Yellow_Area={240,-195,-130};
 
 
 	int Green_Stored=0;
@@ -626,7 +626,7 @@ void Stepper2_Task_function(void const * argument)
     	if(fabs(O2_t-O2)>0.07){		
 			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(100); sens_2= -1;}
 			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(100);  sens_2= 1;}	
-		  if(Delayed){HAL_Delay(280);Delayed=0;}                 //to be deleted 
+		  if(Delayed){HAL_Delay(310);Delayed=0;}                 //to be deleted 
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
 			osDelay(1);    // equal to 580 micro-second !!!
@@ -653,7 +653,7 @@ void Stepper3_Task_function(void const * argument)
 			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(100); sens_3= 1;}
 			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(100);  sens_3=-1;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
-			if(Delayed){HAL_Delay(280);}                 //to be deleted 
+			if(Delayed){HAL_Delay(310);}                 //to be deleted 
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
@@ -688,10 +688,10 @@ void Main_Arm_Task_function(void const * argument)
 			  state=sorting;
 			  Get_Defected();
 				 switch (color){
-					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z);Green_Area.z+=30;Green_Stored++;break;
-					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z);Red_Area.z+=30;Red_Stored++;break;
-					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);Blue_Area.z+=30;Blue_Stored++;break;
-					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Area.z+=30;Yellow_Stored++;break;
+					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z);Green_Area.z+=24;Green_Stored++;break;
+					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z);Red_Area.z+=24;Red_Stored++;break;
+					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);Blue_Area.z+=24;Blue_Stored++;break;
+					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Area.z+=24;Yellow_Stored++;break;
            default : break;
 				 }     			 
 			}
