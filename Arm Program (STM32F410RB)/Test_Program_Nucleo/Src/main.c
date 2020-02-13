@@ -58,6 +58,19 @@
 	#include <stdlib.h>
 	#include <stdio.h>	
 	
+	
+	#define PI 									3.141592653
+  #define step1_resolution    0.060944641    
+	#define step2_resolution    0.055333713
+	#define step3_resolution    0.05530133    
+	#define step4_resolution    0.055469953
+	#define x_init         132.861984
+	#define y_init         0.00
+	#define z_init         -25.3336658
+	#define l2  		  162.00
+	#define l3   		  162.00
+	#define l4		    122.5 
+	
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -77,36 +90,12 @@ osThreadId Main_Arm_TaskHandle;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
  
-	#define PI 									3.141592653
-  #define step1_resolution    0.060944641    // 1 step => 0.060944641 ° deg
-	#define step2_resolution    0.055333713
-	#define step3_resolution    0.05530133    
-	#define step4_resolution    0.055469953
-	#define x_init         132.861984
-	#define y_init         0.00
-	#define z_init         -25.3336658
-
-	#define O1_init     	 0.00
-	#define O2_init  			 0.00
-	#define O3_init 			 0.00
-	#define O4_init  			 0.00
-	
-	#define l2  		  162.00
-	#define l3   		  162.00
-	#define l4		    122.5 //94.50
-	
-
 typedef struct{
 	int x;
 	int y;
 	int z;
 	}Color_Area;
-	
-	
-  extern float x_test;
-	extern float y_test;
-	extern float z_test;
-	
+		
 	const char sleeping='a';    // 1 step => 0.060944641 ° deg
 	const char tracking ='b';
 	const char sorting='c';
@@ -119,7 +108,7 @@ typedef struct{
 	double O2_t=90;
 	double O3_t=-35;
 	double O4_t=-90;      
-	float x,y,z=0;                  // effector coordinates 
+
 	char state = sleeping;
 	int Step1_done,Step2_done,Step3_done = 0;
 	
@@ -131,24 +120,18 @@ typedef struct{
 	int adc=0;
   int x_target=0;                         
 	int y_target=0;
- 
   int Delayed=0;
-	
 	int i=-1; int nb=0;
 	char	PC_Data[7];
-  char  cmd_Data[12];	
 	char	x_tab[3]={0};      
 	char	y_tab[3]={0};
-	char	x_cmd[4]={0};     
-	char	y_cmd[4]={0};
- 	char	z_cmd[4]={0}; 
+
 	
 	char color ='g';
 	Color_Area  Green_Area={150,195,-130};
-  Color_Area  Red_Area={240,195,-130};
+  Color_Area  Red_Area={250,195,-130};
   Color_Area  Blue_Area={150,-195,-130};
-  Color_Area  Yellow_Area={240,-195,-130};
-
+  Color_Area  Yellow_Area={250,-195,-130};
 
 	int Green_Stored=0;
 	int Red_Stored=0;	
@@ -163,7 +146,6 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_ADC1_Init(void);
-void StartDefaultTask(void const * argument);
 void Stepper1_Task_function(void const * argument);
 void Stepper2_Task_function(void const * argument);
 void Stepper3_Task_function(void const * argument);
@@ -172,27 +154,15 @@ void Main_Arm_Task_function(void const * argument);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
-		
-#ifdef __GNUC__
-   #define  PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else  
-   #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f) 
-#endif 
-	 
-int check_Defected(void);
-void Get_Defected(void);
+int check_Object(void);
+void Get_Object(void);
 int Steppers_Ready(void);
 void Set_joint_angles(float xt,float yt,float zt);
-void delay_micros(int us);
+
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 
-	 PUTCHAR_PROTOTYPE{
-		 
-	HAL_UART_Transmit(&huart2,(uint8_t *)&ch,1,0xFFFF);
-   return ch;
-	 }
 /* USER CODE END 0 */
 
 /**
@@ -244,9 +214,6 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of Stepper1_Task */
   osThreadDef(Stepper1_Task, Stepper1_Task_function, osPriorityNormal, 0, 128);
@@ -272,12 +239,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
- 
-	//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);
-	//HAL_Delay(20000);
-	//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);
-	//O3_t=10;
-	//O2_t=10;
+
   /* Start scheduler */
  osKernelStart();
   
@@ -509,12 +471,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void delay_micros(int us){   // To be  deleted !!!!!!!!!!!!!!
-for(int i=0;i<us;i++){
-	for(int k=0;k<26;k++){}
- }
-}
-
 int sign(float n){
 	if(n>=0)
 		return 1;
@@ -527,7 +483,7 @@ float rad_to_deg(double x){
 			}
 
 
-int check_Defected(){	
+int check_Object(){	
 	   adc=0;
      for(int k=0;k<50;k++){		
     	HAL_ADC_Start(&hadc1);
@@ -538,7 +494,7 @@ int check_Defected(){
 		}
 
 void  Set_joint_angles(float xt,float yt , float zt){		
-	// project Module   	
+	 	
 	float a=sqrt(xt*xt+yt*yt);
 	float sphere_radius=sqrt(a*a+(zt+l4)*(zt+l4));
 	float alpha=(a*a+(zt+l4)*(zt+l4)+l3*l3-l2*l2)/(2*l3);                                                           
@@ -550,12 +506,11 @@ void  Set_joint_angles(float xt,float yt , float zt){
 	O2_t=acos(alpha/sphere_radius)+beta;
 	O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
 			
-		
 	O1_t=rad_to_deg(O1_t);
 	O2_t=rad_to_deg(O2_t);
 	O3_t=rad_to_deg(O3_t);
 	O4_t=-90.00;
-
+		
 		Step1_done=0; Step2_done=0; Step3_done=0; 
  }	
 }
@@ -564,31 +519,19 @@ int Steppers_Ready(){
 	return(Step1_done && Step2_done && Step3_done); 
 }
 
-void Get_Defected(){
+void Get_Object(){
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
 	Set_joint_angles(x_target,y_target,-175);  
 	while(!Steppers_Ready());
 	if(((Green_Stored>=2)&&(color=='g'))||((Red_Stored>=2)&&(color=='r'))||((Blue_Stored>=2)&&(color=='b'))||((Yellow_Stored>=2)&&(color=='y')))
-	{Set_joint_angles(x_target,y_target,-60); while(!Steppers_Ready());}
+	{Set_joint_angles(x_target,y_target,-75); HAL_Delay(500);while(!Steppers_Ready());}
 	else
-	{Set_joint_angles(x_target,y_target,-95);	while(!Steppers_Ready());} 	
+	{Set_joint_angles(x_target,y_target,-95);	HAL_Delay(300);while(!Steppers_Ready());} 	
        
 }
 
 /* USER CODE END 4 */
 
-/* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
-{
-
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-		osDelay(1); // 500 us
-  }
-  /* USER CODE END 5 */ 
-}
 
 /* Stepper1_Task_function function */
 void Stepper1_Task_function(void const * argument)
@@ -602,7 +545,7 @@ void Stepper1_Task_function(void const * argument)
 		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(90);  sens_1= -1;}		
       HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-			osDelay(1);         // To be Deleted !     // equal to 590 micro-second !!!
+			osDelay(1);         // equal to 590 micro-second !!!
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
 			osDelay(1);
 	    O1+=(step1_resolution*sens_1);     		 
@@ -610,8 +553,7 @@ void Stepper1_Task_function(void const * argument)
 		else{
 			Step1_done=1;
 		  osDelay(1);
-		}
-			
+		}			
 	}
   /* USER CODE END Stepper1_Task_function */
 }
@@ -626,7 +568,7 @@ void Stepper2_Task_function(void const * argument)
     	if(fabs(O2_t-O2)>0.07){		
 			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(100); sens_2= -1;}
 			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(100);  sens_2= 1;}	
-		  if(Delayed){HAL_Delay(310);Delayed=0;}                 //to be deleted 
+		  if(Delayed){HAL_Delay(370);Delayed=0;}                 //to be deleted 
       HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
 			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
 			osDelay(1);    // equal to 580 micro-second !!!
@@ -653,7 +595,7 @@ void Stepper3_Task_function(void const * argument)
 			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(100); sens_3= 1;}
 			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(100);  sens_3=-1;}		
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
-			if(Delayed){HAL_Delay(310);}                 //to be deleted 
+			if(Delayed){HAL_Delay(370);}                 //to be deleted 
 			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
 			osDelay(1);   // equal to 500 micro-second !!!
 			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
@@ -677,21 +619,16 @@ void Main_Arm_Task_function(void const * argument)
   for(;;)
   {
 		osDelay(1);
-		/*
-		x=(l2*cos(O2*PI/180)+l3*cos(O3*PI/180))*cos(O1*PI/180);
-		y=(l2*cos(O2*PI/180)+l3*cos(O3*PI/180))*sin(O1*PI/180);
-		z=l2*sin(O2*PI/180)+l3*sin(O3*PI/180)-l4;
-		*/
 
 	   if(Steppers_Ready() && state==tracking ){		
-			 if(check_Defected()){
+			 if(check_Object()){
 			  state=sorting;
-			  Get_Defected();
+			  Get_Object();
 				 switch (color){
-					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z);Green_Area.z+=24;Green_Stored++;break;
-					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z);Red_Area.z+=24;Red_Stored++;break;
-					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);Blue_Area.z+=24;Blue_Stored++;break;
-					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Area.z+=24;Yellow_Stored++;break;
+					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z);Green_Stored++;break;
+					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z);Red_Stored++;break;
+					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);Blue_Stored++;break;
+					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Stored++;break;
            default : break;
 				 }     			 
 			}
@@ -702,8 +639,15 @@ void Main_Arm_Task_function(void const * argument)
 			
 		if(Steppers_Ready() && state==sorting )
 		{		
-			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF  
-			while(check_Defected()); 
+					switch (color){
+					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z-14);Green_Area.z+=25;Green_Stored++;break;
+					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z-14);Red_Area.z+=25;Red_Stored++;break;
+					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z-14);Blue_Area.z+=25;Blue_Stored++;break;
+					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z-14);Yellow_Area.z+=25;Yellow_Stored++;break;
+           default : break;
+				 }
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF 			
+			HAL_Delay(1500);//while(check_Object()); 
 		  Delayed=1;                           // to be deleted 
 			Set_joint_angles(x_init,y_init,z_init); 	
 			state=sleeping;

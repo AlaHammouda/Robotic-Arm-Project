@@ -17,6 +17,7 @@ blueLower  = (95, 70, 100)
 blueUpper  = (111, 255, 255)
 yellowLower= (21, 58, 146)
 yellowUpper= (35, 255, 255)
+object_detected=0
 
 vs = VideoStream(src=1).start()
 time.sleep(2.0)
@@ -25,7 +26,7 @@ time.sleep(2.0)
 while True:
 	# grab the current frame
 	frame = vs.read()
- 
+
 	# resize the frame, blur it, and convert it to the HSV
 	# color space
 	frame = imutils.resize(frame, width=600)
@@ -55,7 +56,7 @@ while True:
 	mask_y = cv2.dilate(mask_y, None, iterations=2)
 	cnts_y = cv2.findContours(mask_y.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 	cnts_y = imutils.grab_contours(cnts_y)
-
+	object_detected = 0
 	
 	if len(cnts_g) > 0:
 		c = max(cnts_g, key=cv2.contourArea)
@@ -66,8 +67,9 @@ while True:
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 0), 2)
 			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'g')
 			ser.write(str.encode(STM_Data))
+			object_detected = 1
 			
-	elif len(cnts_r) > 0:
+	if len(cnts_r) > 0 and not(object_detected):
 		c = max(cnts_r, key=cv2.contourArea)
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
@@ -76,8 +78,9 @@ while True:
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 0, 255), 2)
 			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'r')
 			ser.write(str.encode(STM_Data))
+			object_detected = 1
 			
-	elif len(cnts_b) > 0:
+	if len(cnts_b) > 0 and not(object_detected):
 		c = max(cnts_b, key=cv2.contourArea)
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
@@ -85,9 +88,10 @@ while True:
 		if radius > 70 and radius < 90:
 			cv2.circle(frame, (int(x), int(y)), int(radius),(255, 0, 0), 2)
 			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'b')
-			ser.write(str.encode(STM_Data)) 
+			ser.write(str.encode(STM_Data))
+			object_detected = 1
 
-	elif len(cnts_y) > 0:
+	if len(cnts_y) > 0 and not(object_detected):
 		c = max(cnts_y, key=cv2.contourArea)
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
@@ -95,7 +99,8 @@ while True:
 		if radius > 70 and radius < 90:
 			cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
 			STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+'y')
-			ser.write(str.encode(STM_Data)) 	
+			ser.write(str.encode(STM_Data))
+			object_detected = 1
 
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
