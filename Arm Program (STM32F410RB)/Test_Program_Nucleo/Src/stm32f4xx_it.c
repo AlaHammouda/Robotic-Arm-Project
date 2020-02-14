@@ -38,9 +38,9 @@
 
 /* USER CODE BEGIN 0 */
 
-	extern	int x_target;                           // les variables d'odométries
-	extern	int y_target;
-	extern  int i;
+	extern	short x_target;                           // les variables d'odométries
+	extern	short y_target;
+	extern  unsigned char i;
 	extern	char	PC_Data[7];  
 	extern	char	x_tab[3];        
 	extern	char	y_tab[3];

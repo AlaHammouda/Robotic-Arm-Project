@@ -13,10 +13,11 @@ greenLower = (45,44,100)
 greenUpper = (85, 255, 255)
 redLower   = (0, 50, 145)
 redUpper   = (7, 255, 255)
-blueLower  = (95, 70, 100)
+blueLower  = (95, 170, 123)
 blueUpper  = (111, 255, 255)
-yellowLower= (21, 58, 146)
+yellowLower= (21, 90, 100)
 yellowUpper= (35, 255, 255)
+
 object_detected=0
 
 vs = VideoStream(src=1).start()
