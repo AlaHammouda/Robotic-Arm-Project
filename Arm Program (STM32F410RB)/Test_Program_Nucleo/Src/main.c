@@ -152,7 +152,7 @@ void Main_Arm_Task_function(void const * argument);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
-unsigned char check_Object(void);
+int check_Object(void);
 void Get_Object(void);
 unsigned char Steppers_Ready(void);
 void Set_joint_angles(float xt,float yt,float zt);
@@ -481,14 +481,14 @@ float rad_to_deg(double x){
 			}
 
 
-unsigned char check_Object(){	
-	short  adc=0;
+int check_Object(){	
+	int  adc=0;
 	   adc=0;
-     for(int k=0;k<50;k++){		
+     for(int k=0;k<100;k++){		
     	HAL_ADC_Start(&hadc1);
 		  adc+=HAL_ADC_GetValue(&hadc1);	
 		  }
-		 adc/=50;
+		 adc/=100;
 		  return (adc<100);
 		}
 
