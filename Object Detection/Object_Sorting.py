@@ -1,5 +1,5 @@
 
-# import the necessary packages
+# import the necessary packages.
 from imutils.video import VideoStream
 import numpy as np
 import cv2

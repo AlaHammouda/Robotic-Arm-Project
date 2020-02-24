@@ -3,11 +3,11 @@
 <title>Static Call Graph - [Test_Program_Nucleo\Test_Program_Nucleo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Test_Program_Nucleo\Test_Program_Nucleo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Feb 23 17:18:41 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Feb 24 00:50:01 2020
 <BR><P>
 <H3>Maximum Stack Usage =        416 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-USART2_IRQHandler &rArr; Set_Joints_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+USART2_IRQHandler &rArr; Set_Joint_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 <P>
 <H3>
 Mutually Recursive functions
@@ -376,7 +376,7 @@ Global Symbols
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper3_Task_function
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper2_Task_function
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper1_Task_function
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_sin
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ieee754_rem_pio2
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_poly
@@ -394,7 +394,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART2_IRQHandler
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_sin
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ieee754_rem_pio2
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_cos
@@ -426,7 +426,7 @@ Global Symbols
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper3_Task_function
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper2_Task_function
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper1_Task_function
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_sin
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ieee754_rem_pio2
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_poly
@@ -444,7 +444,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_round
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rad_to_deg
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_invalid
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_divzero
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
@@ -461,7 +461,7 @@ Global Symbols
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper3_Task_function
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper2_Task_function
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper1_Task_function
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ieee754_rem_pio2
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 </UL>
@@ -480,7 +480,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper3_Task_function
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper2_Task_function
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper1_Task_function
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[5c]"></a>__aeabi_d2f</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, d2f.o(.text))
@@ -492,7 +492,7 @@ Global Symbols
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper3_Task_function
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper2_Task_function
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stepper1_Task_function
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[4e]"></a>__aeabi_llsl</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, llshl.o(.text))
@@ -918,19 +918,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 </UL>
 
-<P><STRONG><a name="[48]"></a>Main_Arm_Task_function</STRONG> (Thumb, 634 bytes, Stack size 16 bytes, main.o(i.Main_Arm_Task_function))
-<BR><BR>[Stack]<UL><LI>Max Depth = 400<LI>Call Chain = Main_Arm_Task_function &rArr; Set_Joints_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[48]"></a>Main_Arm_Task_function</STRONG> (Thumb, 306 bytes, Stack size 16 bytes, main.o(i.Main_Arm_Task_function))
+<BR><BR>[Stack]<UL><LI>Max Depth = 400<LI>Call Chain = Main_Arm_Task_function &rArr; Set_Joint_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Steppers_Ready
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check_Object
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[95]"></a>Set_Joints_Angles</STRONG> (Thumb, 714 bytes, Stack size 80 bytes, main.o(i.Set_Joints_Angles))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384<LI>Call Chain = Set_Joints_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[95]"></a>Set_Joint_Angles</STRONG> (Thumb, 714 bytes, Stack size 80 bytes, main.o(i.Set_Joint_Angles))
+<BR><BR>[Stack]<UL><LI>Max Depth = 384<LI>Call Chain = Set_Joint_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
@@ -1038,7 +1038,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[2a]"></a>USART2_IRQHandler</STRONG> (Thumb, 226 bytes, Stack size 32 bytes, stm32f4xx_it.o(i.USART2_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = USART2_IRQHandler &rArr; Set_Joints_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+<BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = USART2_IRQHandler &rArr; Set_Joint_Angles &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
@@ -1047,7 +1047,7 @@ Global Symbols
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f410rx.o(RESET)
@@ -1082,7 +1082,7 @@ Global Symbols
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sqrt
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
 </UL>
-<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[9a]"></a>__hardfp_atan</STRONG> (Thumb, 622 bytes, Stack size 48 bytes, atan.o(i.__hardfp_atan))
@@ -1099,7 +1099,7 @@ Global Symbols
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_infnan
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
 </UL>
-<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[9d]"></a>__hardfp_cos</STRONG> (Thumb, 180 bytes, Stack size 32 bytes, cos.o(i.__hardfp_cos))
@@ -1112,7 +1112,7 @@ Global Symbols
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_infnan
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_cos
 </UL>
-<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[98]"></a>__hardfp_pow</STRONG> (Thumb, 3072 bytes, Stack size 192 bytes, pow.o(i.__hardfp_pow))
@@ -1137,7 +1137,7 @@ Global Symbols
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_scalbn
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
 </UL>
-<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[99]"></a>__hardfp_sqrt</STRONG> (Thumb, 122 bytes, Stack size 32 bytes, sqrt.o(i.__hardfp_sqrt))
@@ -1146,7 +1146,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__set_errno
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsqrt
 </UL>
-<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[ae]"></a>__ieee754_rem_pio2</STRONG> (Thumb, 938 bytes, Stack size 120 bytes, rred.o(i.__ieee754_rem_pio2))
@@ -1356,11 +1356,11 @@ Global Symbols
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[9b]"></a>sign</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, main.o(i.sign))
-<BR><BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joints_Angles
+<BR><BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Joint_Angles
 </UL>
 
 <P><STRONG><a name="[aa]"></a>sqrt</STRONG> (Thumb, 110 bytes, Stack size 32 bytes, sqrt.o(i.sqrt))

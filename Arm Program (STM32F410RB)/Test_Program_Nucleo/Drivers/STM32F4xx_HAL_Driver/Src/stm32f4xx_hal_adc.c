@@ -1198,7 +1198,7 @@ uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef* hadc)
 }
 
 /**
-  * @brief  Regular conversion complete callback in non blocking mode 
+  * @brief  Regular conversion complete callback in non blocking mode. 
   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
   *         the configuration information for the specified ADC.
   * @retval None

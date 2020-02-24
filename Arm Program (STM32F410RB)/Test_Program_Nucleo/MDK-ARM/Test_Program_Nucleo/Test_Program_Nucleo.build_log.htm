@@ -28,11 +28,11 @@ Project File Date:  02/01/2020
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Test_Program_Nucleo'
 compiling stm32f4xx_it.c...
-../Src/stm32f4xx_it.c(124): warning:  #223-D: function "atoi" declared implicitly
-  										y_target=atoi(y_tab);
+../Src/stm32f4xx_it.c(125): warning:  #223-D: function "atoi" declared implicitly
+  										y_target=atoi(y_tab);       /* convert y_tab to an integer value */     
 ../Src/stm32f4xx_it.c: 1 warning, 0 errors
 linking...
-Program Size: Code=21420 RO-data=1460 RW-data=220 ZI-data=16884  
+Program Size: Code=21092 RO-data=1460 RW-data=216 ZI-data=16880  
 FromELF: creating hex file...
 "Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 1 Warning(s).
 
@@ -57,7 +57,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
