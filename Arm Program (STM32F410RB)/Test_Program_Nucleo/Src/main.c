@@ -53,22 +53,32 @@
 
 /* USER CODE BEGIN Includes */
 	
-	#include "math.h"
-	#include "string.h"
-	#include <stdlib.h>
-	#include <stdio.h>	
+#include "math.h"
+#include "string.h"
+#include <stdlib.h>
+#include <stdio.h>	
 	
 	
-	#define PI 											3.141592653
-  #define step1_resolution  		  0.060944641    
-	#define step2_resolution  		  0.055333713
-	#define step3_resolution    		0.055301333    
-	#define x_init       					  132.861984
-	#define y_init        				  0.00
-	#define z_init        				  -25.3336658
-	#define l2  		  							162.00
-	#define l3   		 								162.00
-	#define l4		  							  122.5 
+		
+#define PI 											3.141592653
+#define STEP1_RESOLUTION  		  0.060944641    
+#define STEP2_RESOLUTION  		  0.055333713
+#define STEP3_RESOLUTION    		0.055301333    
+#define X_INIT       					  132.861984
+#define Y_INIT        				  0.00
+#define Z_INIT        				  -25.3336658
+#define SENS_SWITCH_WAIT		  	100 
+#define l2  		  							162.00
+#define l3   		 								162.00
+#define l4		  							  122.5 
+	
+	
+typedef struct{
+	short x;
+	short y;
+	short z;
+	}Color_Area;
+	
 	
 /* USER CODE END Includes */
 
@@ -88,53 +98,44 @@ osThreadId Main_Arm_TaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
- 
-typedef struct{
-	short x;
-	short y;
-	short z;
-	}Color_Area;
-		
-	const char sleeping='a';    // 1 step => 0.060944641 ° deg
-	const char tracking ='b';
-	const char sorting='c';
+ 	
+const char SLEEPING='a';   
+const char TRACKING ='b';
+const char SORTING='c';
 	
-	float O1=0;              // current angles 
-	float O2=-35.2;  
-	float O3=60.1;  
-	float O4=-90;  
-	float O1_t=0;
-	float O2_t=90;
-	float O3_t=-35;
-	float O4_t=-90;      
+float O1=0;              
+float O2=-35.2;  
+float O3=60.1;  
+float O4=-90;
 
-	char state = sleeping;
-	unsigned char Step1_done,Step2_done,Step3_done = 0;
-	
-	short sens_1=1; 
-  short sens_2=1;	
-	short sens_3=-1; 
-  short sens_4=1;
-	
-  short  x_target=0;                         
-	short  y_target=0;
-  short  Delayed=0;
-	short i=-1; 
-	char	PC_Data[7];
-	char	x_tab[3]={0};      
-	char	y_tab[3]={0};
+float O1_t=0;
+float O2_t=90;
+float O3_t=-35;
+float O4_t=-90;      
 
-	
-	char color ='g';
-	Color_Area  Green_Area={150,195,-130};
-  Color_Area  Red_Area={250,195,-130};
-  Color_Area  Blue_Area={150,-195,-130};
-  Color_Area  Yellow_Area={250,-195,-130};
+char state = SLEEPING;
+unsigned char Step1_done,Step2_done,Step3_done = 0;
+short sens_1=1; 
+short sens_2=1;	
+short sens_3=-1; 
+short  x_target=0;                         
+short  y_target=0;
+short  Delayed=0;
 
-	unsigned char Green_Stored=0;
-	unsigned char Red_Stored=0;	
-	unsigned char Blue_Stored=0;
-	unsigned char Yellow_Stored=0;
+char	PC_Data[7];
+char	x_tab[3]={0};      
+char	y_tab[3]={0};
+
+char color ='g';
+Color_Area  Green_Area={150,195,-130};
+Color_Area  Red_Area={250,195,-130};
+Color_Area  Blue_Area={150,-195,-130};
+Color_Area  Yellow_Area={250,-195,-130};
+
+unsigned char Nb_Green_Stored=0;
+unsigned char Nb_Red_Stored=0;	
+unsigned char Nb_Blue_Stored=0;
+unsigned char Nb_Yellow_Stored=0;
 
 /* USER CODE END PV */
 
@@ -152,10 +153,9 @@ void Main_Arm_Task_function(void const * argument);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
-int check_Object(void);
-void Get_Object(void);
+int Check_Object(void);
 unsigned char Steppers_Ready(void);
-void Set_joint_angles(float xt,float yt,float zt);
+void Set_Joints_Angles(float xt,float yt,float zt);
 
 /* USER CODE END PFP */
 
@@ -469,60 +469,48 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-int sign(float n){
-	if(n>=0)
-		return 1;
-	else
-		return -1;
+int sign(float x){
+	return (x > 0) - (x < 0);
 }
 	
-float rad_to_deg(double x){
-				return(x*360/(2*PI));
-			}
+float rad_to_deg(double rad){
+				return(rad*360/(2*PI));
+}
 
-
-int check_Object(){	
+int Check_Object(){	
 	int  adc=0;
-	   adc=0;
-     for(int k=0;k<100;k++){		
+  for(int i=0;i<100;i++){		
     	HAL_ADC_Start(&hadc1);
 		  adc+=HAL_ADC_GetValue(&hadc1);	
 		  }
 		 adc/=100;
 		  return (adc<100);
-		}
+}
 
-void  Set_joint_angles(float xt,float yt , float zt){		
+void  Set_Joints_Angles(float xt,float yt , float zt){		
 	 	
-	float a=sqrt(xt*xt+yt*yt);
-	float sphere_radius=sqrt(a*a+(zt+l4)*(zt+l4));
-	float alpha=(a*a+(zt+l4)*(zt+l4)+l3*l3-l2*l2)/(2*l3);                                                           
+	float a=sqrt(pow(xt,2)+pow(yt,2));
+	float sphere_radius=sqrt(a*a+pow((zt+l4),2));
+	float alpha=(a*a+pow((zt+l4),2)+pow(l3,2)-pow(l2,2))/(2*l3);                                                           
 	float beta=atan((zt+l4)/a);
 
-	if(sphere_radius<=324){  // authorised area that the robotic arm can attend 
+	if(sphere_radius<=324){ 
 	
-  if(xt==0) O1_t=PI/2*sign(yt); else  O1_t=atan(yt/xt);
-	O2_t=acos(alpha/sphere_radius)+beta;
-	O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
+		if(xt==0) O1_t=PI/2*sign(yt); else  O1_t=atan(yt/xt);
+		O2_t=acos(alpha/sphere_radius)+beta;
+		O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
 			
-	O1_t=rad_to_deg(O1_t);
-	O2_t=rad_to_deg(O2_t);
-	O3_t=rad_to_deg(O3_t);
-	O4_t=-90.00;
+		O1_t=rad_to_deg(O1_t);
+		O2_t=rad_to_deg(O2_t);
+		O3_t=rad_to_deg(O3_t);
+		O4_t=-90.00;
 		
 		Step1_done=0; Step2_done=0; Step3_done=0; 
- }	
+	}	
 }
 
 unsigned char Steppers_Ready(){
 	return(Step1_done && Step2_done && Step3_done); 
-}
-
-void Get_Object(){
-	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
-	Set_joint_angles(x_target,y_target,-178);  
-	while(!Steppers_Ready());
-	Set_joint_angles(x_target,y_target,-116);	while(!Steppers_Ready()); 	     
 }
 
 /* USER CODE END 4 */
@@ -535,15 +523,18 @@ void Stepper1_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {	
-		if(fabs(O1_t-O1)>0.07){		
-		if((O1<O1_t)&&(sens_1==-1)){HAL_Delay(90); sens_1= 1;}
-		if((O1>O1_t)&&(sens_1==1)){HAL_Delay(90);  sens_1= -1;}		
-      HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
-			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-			osDelay(1);         // equal to 590 micro-second !!!
-			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-			osDelay(1);
-	    O1+=(step1_resolution*sens_1);     		 
+		if(fabs(O1_t-O1)>(STEP1_RESOLUTION+0.01)){		
+				if((O1<O1_t)&&(sens_1==-1)){osDelay(SENS_SWITCH_WAIT); sens_1= 1; }
+				if((O1>O1_t)&&(sens_1==1)){osDelay(SENS_SWITCH_WAIT);  sens_1= -1;}		
+				
+				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
+			
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
+				osDelay(1);         
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
+				osDelay(1);
+	  
+				O1+=(STEP1_RESOLUTION*sens_1);     		 
      }
 		else{
 			Step1_done=1;
@@ -560,16 +551,18 @@ void Stepper2_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    	if(fabs(O2_t-O2)>0.07){		
-			if((O2>O2_t)&&(sens_2==1)){	 HAL_Delay(100); sens_2= -1;}
-			if((O2<O2_t)&&(sens_2==-1)){ HAL_Delay(100);  sens_2= 1;}	
-		  if(Delayed){HAL_Delay(450);Delayed=0;}                 //to be deleted 
-      HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-			osDelay(1);    // equal to 580 micro-second !!!
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-			osDelay(1);
-	    O2+=(step2_resolution*sens_2);     		 
+    	if(fabs(O2_t-O2)>(STEP2_RESOLUTION+0.01)){		
+					if((O2>O2_t)&&(sens_2==1)){	 osDelay(SENS_SWITCH_WAIT); sens_2= -1;}
+					if((O2<O2_t)&&(sens_2==-1)){ osDelay(SENS_SWITCH_WAIT);  sens_2= 1;}	
+
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);		
+					
+					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
+					osDelay(1);    
+					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
+					osDelay(1);
+					
+					O2+=(STEP2_RESOLUTION*sens_2);     		 
      }
 		else{
 			Step2_done=1;
@@ -586,16 +579,18 @@ void Stepper3_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    	if(fabs(O3_t-O3)>0.07){		
-			if((O3<O3_t)&&(sens_3==-1)){HAL_Delay(100); sens_3= 1;}
-			if((O3>O3_t)&&(sens_3==1)){HAL_Delay(100);  sens_3=-1;}		
-			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
-			if(Delayed){HAL_Delay(450);}       //to be deleted 
-			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
-			osDelay(1);   // equal to 500 micro-second !!!
-			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
-			osDelay(1);
-	    O3+=(step3_resolution*sens_3);     		 
+    	if(fabs(O3_t-O3)>(STEP3_RESOLUTION+0.01)){		
+					if((O3<O3_t)&&(sens_3==-1)){osDelay(SENS_SWITCH_WAIT); sens_3= 1;}
+					if((O3>O3_t)&&(sens_3==1)){osDelay(SENS_SWITCH_WAIT);  sens_3=-1;}		
+					
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
+
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
+					osDelay(1);   
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
+					osDelay(1);
+					
+					O3+=(STEP3_RESOLUTION*sens_3);     		 
      }
 		else{
 			Step3_done=1;
@@ -613,41 +608,44 @@ void Main_Arm_Task_function(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-		osDelay(1);
-
-	   if(Steppers_Ready() && state==tracking ){		
-			 if(check_Object()){
-			  state=sorting;
-			  Get_Object();
-				 switch (color){
-					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z);Green_Stored++;break;
-					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z);Red_Stored++;break;
-					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);Blue_Stored++;break;
-					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Stored++;break;
-           default : break;
-				 }     			 
-			}
-			else{
-				 state=sleeping;  Set_joint_angles(x_init,y_init,z_init); 		
-			}
-		}
-			
-		if(Steppers_Ready() && state==sorting )
-		{		
+	   if(Steppers_Ready() && state==TRACKING ){		
+			 if(Check_Object()){
+					state=SORTING;
+			  	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
+					Set_Joints_Angles(x_target,y_target,-178);  
+					while(!Steppers_Ready());
+					Set_Joints_Angles(x_target,y_target,-116);	
+					while(!Steppers_Ready()); 	     
 					switch (color){
-					 case 'g':Set_joint_angles(Green_Area.x,Green_Area.y,Green_Area.z-14);Green_Area.z+=25;Green_Stored++;break;
-					 case 'r':Set_joint_angles(Red_Area.x,Red_Area.y,Red_Area.z-14);Red_Area.z+=25;Red_Stored++;break;
-					 case 'b':Set_joint_angles(Blue_Area.x,Blue_Area.y,Blue_Area.z-14);Blue_Area.z+=25;Blue_Stored++;break;
-					 case 'y':Set_joint_angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z-14);Yellow_Area.z+=25;Yellow_Stored++;break;
+						case 'g':Set_Joints_Angles(Green_Area.x,Green_Area.y,Green_Area.z);		 break;
+						case 'r':Set_Joints_Angles(Red_Area.x,Red_Area.y,Red_Area.z);					 break;
+						case 'b':Set_Joints_Angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);			 break;
+						case 'y':Set_Joints_Angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z); break;
+						default : break;
+				 }     			 
+				}
+				else{
+					state=SLEEPING;  
+					Set_Joints_Angles(X_INIT,Y_INIT,Z_INIT); 		
+				}
+			}
+			
+			if(Steppers_Ready() && state==SORTING )
+			{		
+					switch (color){
+					 case 'g':Set_Joints_Angles(Green_Area.x,Green_Area.y,Green_Area.z);  Green_Area.z+=25;	Nb_Green_Stored++;	break;
+					 case 'r':Set_Joints_Angles(Red_Area.x,Red_Area.y,Red_Area.z);				Red_Area.z+=25;		Nb_Red_Stored++;	  break;
+					 case 'b':Set_Joints_Angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);			Blue_Area.z+=25; 	Nb_Blue_Stored++;		break;
+					 case 'y':Set_Joints_Angles(Yellow_Area.x,Yellow_Area.y,Yellow_Area.z);Yellow_Area.z+=25;Nb_Yellow_Stored++;break;
            default : break;
 				 }
-			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF 			
-			HAL_Delay(1300);//while(check_Object()); 
-		  Delayed=1;                           // to be deleted 
-			Set_joint_angles(x_init,y_init,z_init); 	
-			state=sleeping;
-		}
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);  	
+					while(Check_Object()); 
+					Set_Joints_Angles(X_INIT,Y_INIT,Z_INIT); 	
+					state=SLEEPING;
+			}
 		
+		osDelay(1);
   }
   /* USER CODE END Main_Arm_Task_function */
 }

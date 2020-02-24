@@ -27,44 +27,14 @@ Project File Date:  02/01/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Test_Program_Nucleo'
-compiling main.c...
-../Src/main.c(498): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	float sphere_radius=sqrt(a*a+(zt+l4)*(zt+l4));
-../Src/main.c(498): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	float sphere_radius=sqrt(a*a+(zt+l4)*(zt+l4));
-../Src/main.c(499): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	float alpha=(a*a+(zt+l4)*(zt+l4)+l3*l3-l2*l2)/(2*l3);                                                           
-../Src/main.c(499): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	float alpha=(a*a+(zt+l4)*(zt+l4)+l3*l3-l2*l2)/(2*l3);                                                           
-../Src/main.c(500): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	float beta=atan((zt+l4)/a);
-../Src/main.c(522): warning:  #188-D: enumerated type mixed with another type
-  	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);     // pump ON  		
-../Src/main.c(541): warning:  #188-D: enumerated type mixed with another type
-        HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);
-../Src/main.c(542): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);
-../Src/main.c(544): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
-../Src/main.c(567): warning:  #188-D: enumerated type mixed with another type
-        HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			
-../Src/main.c(568): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);
-../Src/main.c(570): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
-../Src/main.c(592): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); 
-../Src/main.c(594): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);
-../Src/main.c(596): warning:  #188-D: enumerated type mixed with another type
-  			 HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
-../Src/main.c(644): warning:  #188-D: enumerated type mixed with another type
-  			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);   // pump OFF 			
-../Src/main.c: 16 warnings, 0 errors
+compiling stm32f4xx_it.c...
+../Src/stm32f4xx_it.c(124): warning:  #223-D: function "atoi" declared implicitly
+  										y_target=atoi(y_tab);
+../Src/stm32f4xx_it.c: 1 warning, 0 errors
 linking...
-Program Size: Code=18148 RO-data=1316 RW-data=224 ZI-data=16880  
+Program Size: Code=21420 RO-data=1460 RW-data=220 ZI-data=16884  
 FromELF: creating hex file...
-"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 16 Warning(s).
+"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

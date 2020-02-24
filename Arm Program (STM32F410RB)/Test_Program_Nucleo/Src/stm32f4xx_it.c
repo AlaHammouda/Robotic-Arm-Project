@@ -38,18 +38,18 @@
 
 /* USER CODE BEGIN 0 */
 
-	extern	short x_target;                           // les variables d'odométries
-	extern	short y_target;
-	extern  unsigned char i;
-	extern	char	PC_Data[7];  
-	extern	char	x_tab[3];        
-	extern	char	y_tab[3];
-	extern  char  state;
-  extern  const char  sorting;	
-  extern  const char  sleeping;  
-	extern  const char  tracking;
-  extern  void Set_joint_angles(float xt,float yt,float zt);
-	extern char color;
+extern	short x_target;                         
+extern	short y_target;
+extern	char	PC_Data[7];  
+extern	char	x_tab[3];        
+extern	char	y_tab[3];
+unsigned char char_received ;
+extern  char  state;
+extern  const char  SORTING;	
+extern  const char  SLEEPING;  
+extern  const char  TRACKING;
+extern  void Set_Joints_Angles(float xt,float yt,float zt);
+extern char color;
 
 /* USER CODE END 0 */
 
@@ -109,28 +109,27 @@ void USART2_IRQHandler(void)
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
 	
-				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,7);  i++;
-					
-   					x_tab[0]=PC_Data[0];     
-						x_tab[1]=PC_Data[1];  
-						x_tab[2]=PC_Data[2];    
-						y_tab[0]=PC_Data[3];     
-						y_tab[1]=PC_Data[4];   
-						y_tab[2]=PC_Data[5];					
-						if(i==7){		
-						if(state==sleeping){
-						color=PC_Data[6];		
-						y_target=atoi(y_tab)/1000000;y_tab[0]=' ';y_tab[1]=' ';y_tab[2]=' ';	
-						x_target=atoi(x_tab);
-						y_target=0.4972*y_target-155.623;
-						x_target=-0.506*x_target+327.53;
-						x_target+=7;
-						if(y_target>89){y_target+=4;}					
-						Set_joint_angles(x_target,y_target,-146);  
-						state=tracking;				
-			      }
-					i=0;
-				}
+				HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,7);  
+				char_received++;							
+						if(char_received==7){
+							x_tab[0] = PC_Data[0];     
+							x_tab[1] = PC_Data[1];  
+							x_tab[2] = PC_Data[2];    
+							y_tab[0] = PC_Data[3];     
+							y_tab[1] = PC_Data[4];   
+							y_tab[2] = PC_Data[5];	
+							color    = PC_Data[6];	
+							
+									if(state==SLEEPING){
+										y_target=atoi(y_tab);
+										x_target=atoi(x_tab);
+										y_target=0.4972*y_target-155.623;
+										x_target=-0.506*x_target+327.53;												
+										Set_Joints_Angles(x_target,y_target,-146);  
+							    	state=TRACKING;				
+							    }
+					    char_received=0;
+					   }
   /* USER CODE END USART2_IRQn 1 */
   }
 
