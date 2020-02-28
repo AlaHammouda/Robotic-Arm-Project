@@ -124,8 +124,8 @@ void USART2_IRQHandler(void)
 									if(state==SLEEPING){       /* ONLY proceed if the arm is in a SLEEPING state */
 										y_target=atoi(y_tab);       /* convert y_tab to an integer value */     
 										x_target=atoi(x_tab);       /* convert x_tab to an  integer value */  
-										y_target=0.4972*y_target-155.623;     /* convert y_target to the arm coordination system  */  
-										x_target=-0.506*x_target+327.53;			/* convert x_target to the arm coordination system  */  								
+										y_target=0.4972*y_target-155.623;     /* convert y_target to the arm coordinate system  */  
+										x_target=-0.506*x_target+327.53;			/* convert x_target to the arm coordinate system  */  								
 										Set_Joint_Angles(x_target,y_target,-146);    /*  Start Tracking the colored object  */ 
 							    	state=TRACKING;				
 							    }

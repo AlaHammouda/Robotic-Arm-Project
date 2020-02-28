@@ -58,18 +58,18 @@
 #include <stdlib.h>
 #include <stdio.h>	
 
-#define PI 											3.141592653
-#define JOINT1_RESOLUTION  		  0.060944641         /*  Joint1 resolution in degree  */
-#define JOINT2_RESOLUTION  		  0.055333713					/*  Joint2 resolution in degree  */
-#define JOINT3_RESOLUTION    		0.055301333 				/*  Joint3 resolution in degree  */   
-#define X_INIT       					  132.861984					/*  x value of the initial position */
-#define Y_INIT        				  0.00                /*  y value of the initial position */
-#define Z_INIT        				  -25.3336658         /*  z value of the initial position */
-#define SENS_SWITCH_DELAY		  	100                 /*  Waiting time, when switching the sens of the stepper  */
-#define MAX_ARM_RANGE           324                 /*  The maximum range that can the effector reach   */
-#define l2  		  							162.00              /*  Length of the arm 2  */
-#define l3   		 								162.00						  /*  Length of the arm 3  */
-#define l4		  							  122.5               /*  Length of the arm 4  */
+#define PI 								3.141592653
+#define JOINT1_RESOLUTION 0.060944641 /*  Joint1 resolution in degree  */
+#define JOINT2_RESOLUTION 0.055333713	/*  Joint2 resolution in degree  */
+#define JOINT3_RESOLUTION 0.055301333 /*  Joint3 resolution in degree  */   
+#define X_INIT       			132.861984	/*  x value of the initial position */
+#define Y_INIT        		0.00        /*  y value of the initial position */
+#define Z_INIT        		-25.3336658 /*  z value of the initial position */
+#define SENS_SWITCH_DELAY	100         /*  Short delay, When switching the sens of the stepper  */
+#define MAX_ARM_RANGE     324         /*  The maximum range that the effector can reach   */
+#define l2  		  				162.00      /*  Length of the arm 2  */
+#define l3   		 					162.00			/*  Length of the arm 3  */
+#define l4		  					122.5       /*  Length of the arm 4  */
 	
 	
 typedef struct{                                    
@@ -102,32 +102,32 @@ const char SLEEPING='z';
 const char TRACKING ='t';
 const char SORTING='s';
 			
-float O1=0;                        									/* Current O1 joint in degree */ 
-float O2=-35.2;                    								  /* Current O2 joint in degree */ 
-float O3=60.1;                    								  /* Current O3 joint in degree */
-float O4=-90;                     								  /* Current O4 joint in degree */
-float O1_t=0;                   								    /* O1 of the current target  */
-float O2_t=90;																			/* O2 of the current target  */
-float O3_t=-35;																			/* O3 of the current target  */
-float O4_t=-90;      																/* O1 of the current target  */
+float O1=0;        /* Current O1 joint in degree */ 
+float O2=-35.2;    /* Current O2 joint in degree */ 
+float O3=60.1;     /* Current O3 joint in degree */
+float O4=-90;      /* Current O4 joint in degree */
+float O1_t=0;      /* O1 of the current target  */
+float O2_t=90;		 /* O2 of the current target  */
+float O3_t=-35;		 /* O3 of the current target  */
+float O4_t=-90;    /* O1 of the current target  */
 
-char state = SLEEPING;          								    /* Status of the Arm  */
+char state = SLEEPING;     /* Status of the Arm  */
 unsigned char Step1_done,Step2_done,Step3_done = 0;	/* Status of each Stepper Motor  */
-short sens_1=1; 																		/* Current sens of the stepper 1 */
-short sens_2=1;																			/* Current sens of the stepper 2 */
-short sens_3=-1; 																		/* Current sens of the stepper 3 */
-short  x_target=0;                         					/* x value of the current target */
-short  y_target=0;																	/* y value of the current target */
+short sens_1=1; 		/* Current sens of the stepper 1 */
+short sens_2=1;			/* Current sens of the stepper 2 */
+short sens_3=-1; 		/* Current sens of the stepper 3 */
+short  x_target=0;  /* x value of the current target */
+short  y_target=0;	/* y value of the current target */
 
 char	PC_Data[7]={0};												        		    
 char	x_tab[3]={0};      
 char	y_tab[3]={0};
 
-char color ='g';             												/* Color of the current object */                      
-Color_Area  Green_Area={150,195,-130};							/* Coordination of the green area */
-Color_Area  Red_Area={250,195,-130};								/* Coordination of the red area */
-Color_Area  Blue_Area={150,-195,-130};							/* Coordination of the blue area */
-Color_Area  Yellow_Area={250,-195,-130};						/* Coordination of the yellow area */
+char color ='g';             						/* Color of the current object */                      
+Color_Area  Green_Area={150,195,-130};	/* Coordinates of the green area */
+Color_Area  Red_Area={250,195,-130};		/* Coordinates of the red area */
+Color_Area  Blue_Area={150,-195,-130};	/* Coordinates of the blue area */
+Color_Area  Yellow_Area={250,-195,-130};/* Coordinates of the yellow area */
 
 /* USER CODE END PV */
 
@@ -145,9 +145,10 @@ void Main_Arm_Task_function(void const * argument);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
-int Check_Object(void);                                /*  Verify if there is an object or no  */
-unsigned char Steppers_Ready(void);										 /*  Get the state of all Stepper Motors  */ 
-void Set_Joint_Angles(float xt,float yt,float zt);     /*  Set(O1_t,O2_t,O3_t,O4_t) of the new target */
+int Check_Object(void);             /*  Verify if there is an object or no  */
+unsigned char Steppers_Ready(void);	/*  Get the state of all Stepper Motors  */ 
+/*  Set(O1_t,O2_t,O3_t,O4_t) of the new target */
+void Set_Joint_Angles(float xt,float yt,float zt);     
 
 /* USER CODE END PFP */
 
@@ -489,18 +490,18 @@ void  Set_Joint_Angles(float xt,float yt , float zt){
 	float alpha=(a*a+pow((zt+l4),2)+pow(l3,2)-pow(l2,2))/(2*l3);                                                           
 	float beta=atan((zt+l4)/a);
 
-	if(sphere_radius<=MAX_ARM_RANGE){             /* Verifying that the new target is in the range of the arm  */
+	if(sphere_radius<=MAX_ARM_RANGE){ /* Verifying that the new target is in the range of the arm  */
 	
 		if(xt==0) O1_t=PI/2*sign(yt); else  O1_t=atan(yt/xt);   
 		O2_t=acos(alpha/sphere_radius)+beta;
 		O3_t=acos((a-l3*cos(O2_t))/l2)*sign(zt);
 			
-		O1_t=rad_to_deg(O1_t);            /* Converting angles from radians to degrees  */ 
+		O1_t=rad_to_deg(O1_t);  /* Converting angles from radians to degrees  */ 
 		O2_t=rad_to_deg(O2_t);
 		O3_t=rad_to_deg(O3_t);
 		O4_t=-90.00;
 		
-		Step1_done=0; Step2_done=0; Step3_done=0;           /* Initializing steppers state to 0  */
+		Step1_done=0; Step2_done=0; Step3_done=0; /* Initializing steppers state to 0  */
 	}	
 }
 
@@ -520,20 +521,20 @@ void Stepper1_Task_function(void const * argument)
   for(;;)
   {	
 		if(fabs(O1_t-O1)>(JOINT1_RESOLUTION+0.01)){		                      
-				if((O1<O1_t)&&(sens_1==-1)){osDelay(SENS_SWITCH_DELAY); sens_1= 1; }    /*  Short delay while reversing    */
-				if((O1>O1_t)&&(sens_1==1)){osDelay(SENS_SWITCH_DELAY);  sens_1= -1;}	  /*	the sens of the stepper motor */
+				if((O1<O1_t)&&(sens_1==-1)){osDelay(SENS_SWITCH_DELAY); sens_1= 1; }  /*  Short delay while reversing    */
+				if((O1>O1_t)&&(sens_1==1)){osDelay(SENS_SWITCH_DELAY);  sens_1= -1;}	/*	the sens of the stepper motor */
 				
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1);       /*  Set the direction of the stepper */  
+				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1); /*  Set the direction of the stepper */  
 			
-				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1);     /* Sending one pulse command to the stepper motor <=> 1 step */
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1); /* Sending one pulse command to the stepper motor <=> 1 step */
 				osDelay(1);                                  
 				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
 				osDelay(1);
 	  
-				O1+=(JOINT1_RESOLUTION*sens_1);       /* Increment or Decrement the joint angle with each step */
+				O1+=(JOINT1_RESOLUTION*sens_1); /* Increment or Decrement the joint angle with each step */
      }
 		else{
-			Step1_done=1;					 /* Set the stepper state to 1 */
+			Step1_done=1; /* Set the stepper state to 1 */
 		  osDelay(1);
 		}			
 	}
@@ -548,20 +549,20 @@ void Stepper2_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O2_t-O2)>(JOINT2_RESOLUTION+0.01)){		
-					if((O2>O2_t)&&(sens_2==1)){	 osDelay(SENS_SWITCH_DELAY); sens_2= -1;} 		/*  Short delay while reversing  */
-					if((O2<O2_t)&&(sens_2==-1)){ osDelay(SENS_SWITCH_DELAY);  sens_2= 1;}			/*	the sens of the stepper motor */
+					if((O2>O2_t)&&(sens_2==1)){	 osDelay(SENS_SWITCH_DELAY); sens_2= -1;} /*  Short delay while reversing  */
+					if((O2<O2_t)&&(sens_2==-1)){ osDelay(SENS_SWITCH_DELAY);  sens_2= 1;}	/*	the sens of the stepper motor */
 
-					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);			/*  Set the direction of the stepper */  
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);/*  Set the direction of the stepper */  
 					
-					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1);		/* Sending one pulse command to the stepper motor <=> 1 step */
+					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); /* Sending one pulse command to the stepper motor <=> 1 step */
 					osDelay(1);    
 					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
 					osDelay(1);
 					
-					O2+=(JOINT2_RESOLUTION*sens_2);      /* Increment or Decrement the joint angle with each step */
+					O2+=(JOINT2_RESOLUTION*sens_2); /* Increment or Decrement the joint angle with each step */
      }
 		else{
-			Step2_done=1;				/* Set the stepper state to 1 */
+			Step2_done=1;	/* Set the stepper state to 1 */
 			osDelay(1);
 		 }
   }
@@ -576,20 +577,20 @@ void Stepper3_Task_function(void const * argument)
   for(;;)
   {
     	if(fabs(O3_t-O3)>(JOINT3_RESOLUTION+0.01)){		
-					if((O3<O3_t)&&(sens_3==-1)){osDelay(SENS_SWITCH_DELAY); sens_3= 1;}     /*  Short delay while reversing  */
-					if((O3>O3_t)&&(sens_3==1)){osDelay(SENS_SWITCH_DELAY);  sens_3=-1;}		  /*	the sens of the stepper motor */
+					if((O3<O3_t)&&(sens_3==-1)){osDelay(SENS_SWITCH_DELAY); sens_3= 1;} /*  Short delay while reversing  */
+					if((O3>O3_t)&&(sens_3==1)){osDelay(SENS_SWITCH_DELAY);  sens_3=-1;}	/*	the sens of the stepper motor */
 					
-					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1);        /*  Set the direction of the stepper */  
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); /*  Set the direction of the stepper */  
 
-					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1);		/* Sending one pulse command to the stepper motor <=> 1 step */
+					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1); /* Sending one pulse command to the stepper motor <=> 1 step */
 					osDelay(1);   
 					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
 					osDelay(1);  
 					
-					O3+=(JOINT3_RESOLUTION*sens_3);     	/* Increment or Decrement the joint angle with each step */	 
+					O3+=(JOINT3_RESOLUTION*sens_3); /* Increment or Decrement the joint angle with each step */	 
      }
 		else{
-			Step3_done=1;					/* Set the stepper state to 1 */
+			Step3_done=1;	/* Set the stepper state to 1 */
 	    osDelay(1);
 		}
   }
@@ -599,24 +600,19 @@ void Stepper3_Task_function(void const * argument)
 /* Main_Arm_Task_function function */
 void Main_Arm_Task_function(void const * argument)
 {
-  /* USER CODE BEGIN Main_Arm_Task_function */
-
   /* Infinite loop */
   for(;;)
   {
 	   if(Steppers_Ready() && state==TRACKING ){		
-			 if(Check_Object()){       /* Object detected */
+			 if(Check_Object()){  /* Object detected */
 				 
 					state=SORTING;
-			  	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);       /* pump ON */  		
-				 
-					Set_Joint_Angles(x_target,y_target,-178);   /* Get object */ 
-					while(!Steppers_Ready());
-				 
-					Set_Joint_Angles(x_target,y_target,-116);	  /* Pick object up  */
-					while(!Steppers_Ready()); 	     
-				 
-					switch (color){          /* Place each object in the appropriate color area  */
+			  	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);  /* pump ON */  				 
+					Set_Joint_Angles(x_target,y_target,-178);  /* Get object */ 
+					while(!Steppers_Ready());		 
+					Set_Joint_Angles(x_target,y_target,-116);	 /* Pick object up  */
+					while(!Steppers_Ready()); 	     			 
+					switch (color){   /* Place each object in the appropriate color area  */
 						case 'g':Set_Joint_Angles(Green_Area.x,Green_Area.y,Green_Area.z);	  Green_Area.z+=25;	  break;    
 						case 'r':Set_Joint_Angles(Red_Area.x,Red_Area.y,Red_Area.z);					Red_Area.z+=25;	 		break;
 						case 'b':Set_Joint_Angles(Blue_Area.x,Blue_Area.y,Blue_Area.z);				Blue_Area.z+=25; 		break;
@@ -624,20 +620,17 @@ void Main_Arm_Task_function(void const * argument)
 						default : break;
 				 }     			 
 				}
-				else{               /* No object detected */
+				else{  /* No object detected */
 					state=SLEEPING;  
-					Set_Joint_Angles(X_INIT,Y_INIT,Z_INIT);         /* Set the Arm to the initial position */	
+					Set_Joint_Angles(X_INIT,Y_INIT,Z_INIT); /* Set the Arm to the initial position */	
 				}
 			}
-			
 			if(Steppers_Ready() && state==SORTING ){
-				
-					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0);  	  /* pump OFF */  
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0); /* pump OFF */  
 					while(Check_Object());                      
-					Set_Joint_Angles(X_INIT,Y_INIT,Z_INIT); 	  /* Set the Arm to the initial position */	
+					Set_Joint_Angles(X_INIT,Y_INIT,Z_INIT); /* Set the Arm to the initial position */	
 					state=SLEEPING;
 			}
-		
 		osDelay(1);
   }
   /* USER CODE END Main_Arm_Task_function */

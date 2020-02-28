@@ -21,7 +21,7 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.1.0
 Dialog DLL:      TCM.DLL V1.35.1.0
  
 <h2>Project:</h2>
-C:\Users\HAMMOUDA\Desktop\YOUPI-2020\Arm Program (STM32F410RB)\Test_Program_Nucleo\MDK-ARM\Test_Program_Nucleo.uvprojx
+C:\Users\HAMMOUDA\Desktop\YOUPI-2020\Robotic Arm Program\MDK-ARM\Test_Program_Nucleo.uvprojx
 Project File Date:  02/01/2020
 
 <h2>Output:</h2>
@@ -31,10 +31,40 @@ compiling stm32f4xx_it.c...
 ../Src/stm32f4xx_it.c(125): warning:  #223-D: function "atoi" declared implicitly
   										y_target=atoi(y_tab);       /* convert y_tab to an integer value */     
 ../Src/stm32f4xx_it.c: 1 warning, 0 errors
+compiling main.c...
+../Src/main.c(489): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	float sphere_radius=sqrt(a*a+pow((zt+l4),2));
+../Src/main.c(490): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	float alpha=(a*a+pow((zt+l4),2)+pow(l3,2)-pow(l2,2))/(2*l3);                                                           
+../Src/main.c(491): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	float beta=atan((zt+l4)/a);
+../Src/main.c(527): warning:  #188-D: enumerated type mixed with another type
+  				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,sens_1-1); /*  Set the direction of the stepper */  
+../Src/main.c(529): warning:  #188-D: enumerated type mixed with another type
+  				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,1); /* Sending one pulse command to the stepper motor <=> 1 step */
+../Src/main.c(531): warning:  #188-D: enumerated type mixed with another type
+  				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_10,0);
+../Src/main.c(555): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_8,sens_2-1);/*  Set the direction of the stepper */  
+../Src/main.c(557): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,1); /* Sending one pulse command to the stepper motor <=> 1 step */
+../Src/main.c(559): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,0);
+../Src/main.c(583): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,sens_3+1); /*  Set the direction of the stepper */  
+../Src/main.c(585): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,1); /* Sending one pulse command to the stepper motor <=> 1 step */
+../Src/main.c(587): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0);
+../Src/main.c(610): warning:  #188-D: enumerated type mixed with another type
+  			  	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,1);  /* pump ON */  				 
+../Src/main.c(629): warning:  #188-D: enumerated type mixed with another type
+  					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,0); /* pump OFF */  
+../Src/main.c: 14 warnings, 0 errors
 linking...
 Program Size: Code=21092 RO-data=1460 RW-data=216 ZI-data=16880  
 FromELF: creating hex file...
-"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 1 Warning(s).
+"Test_Program_Nucleo\Test_Program_Nucleo.axf" - 0 Error(s), 15 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -57,7 +87,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

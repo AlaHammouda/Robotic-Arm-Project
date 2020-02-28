@@ -45,7 +45,7 @@ def Process_Color(cnts,color,color_key):
 	M = cv2.moments(c)
 	center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
         # only proceed if the radius is within 
-	if radius > 70 and radius < 90:
+	if radius > 70 and radius < 75:
                 # draw the circle
 		cv2.circle(frame, (int(x), int(y)), int(radius),color, 2)
 		STM_Data = (str(center[1]).zfill(3))+(str(center[0]).zfill(3)+color_key)
