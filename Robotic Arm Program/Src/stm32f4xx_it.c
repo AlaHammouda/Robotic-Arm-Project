@@ -110,27 +110,27 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 1 */
 	
 	HAL_UART_Receive_IT(&huart2,(uint8_t *)&PC_Data,7);     /* Receive PC_data [ x , y , color  ]  */
-				char_received++;							
+	char_received++;							
 	
-						if(char_received==7){
-							x_tab[0] = PC_Data[0];     
-							x_tab[1] = PC_Data[1];  
-							x_tab[2] = PC_Data[2];    
-							y_tab[0] = PC_Data[3];     
-							y_tab[1] = PC_Data[4];   
-							y_tab[2] = PC_Data[5];	
-							color    = PC_Data[6];	
+	if(char_received==7){
+		x_tab[0] = PC_Data[0];     
+		x_tab[1] = PC_Data[1];  
+		x_tab[2] = PC_Data[2];    
+		y_tab[0] = PC_Data[3];     
+		y_tab[1] = PC_Data[4];   
+		y_tab[2] = PC_Data[5];	
+		color    = PC_Data[6];	
 							
-									if(state==SLEEPING){       /* ONLY proceed if the arm is in a SLEEPING state */
-										y_target=atoi(y_tab);       /* convert y_tab to an integer value */     
-										x_target=atoi(x_tab);       /* convert x_tab to an  integer value */  
-										y_target=0.4972*y_target-155.623;     /* convert y_target to the arm coordinate system  */  
-										x_target=-0.506*x_target+327.53;			/* convert x_target to the arm coordinate system  */  								
-										Set_Joint_Angles(x_target,y_target,-146);    /*  Start Tracking the colored object  */ 
-							    	state=TRACKING;				
-							    }
-					    char_received=0;
-					   }
+		if(state==SLEEPING){    /* ONLY proceed if the arm is in a SLEEPING state */
+		  y_target=atoi(y_tab);   /* convert y_tab to an integer value */     
+		  x_target=atoi(x_tab);   /* convert x_tab to an  integer value */  
+		  y_target=0.4972*y_target-155.623;  /* convert y_target to the arm coordinate system  */  
+		  x_target=-0.506*x_target+327.53;   /* convert x_target to the arm coordinate system  */  								
+		  Set_Joint_Angles(x_target,y_target,-146);  /*  Start Tracking the colored object  */ 
+		  state=TRACKING;				
+		 }
+	char_received=0;
+	 }
   /* USER CODE END USART2_IRQn 1 */
   }
 
